@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.container{
+    @apply max-w-[1265px] mx-auto px-3
+}
+
+.btn{
+    @apply font-semibold px-3 py-2 md:px-5 md:py-3 rounded-3xl
+}
+
+/* ::-webkit-scrollbar{
+    display: none;
+} */

@@ -3,32 +3,43 @@ import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase';
 import Post from '../Components/Pin';
+import { useData } from '../Context/DataProvider';
 
 function Profile() {
-  const [user] = useAuthState(auth)
+  const {user} = useData()
   const [createdPosts,setCreatedPost] = useState([])
-  useEffect(() => {
-    // fetch data from firestore database
-    if (user) { 
-      const notesQuery = query(
-        collection(db,`posts`), where("createdBy", "==", user.email), 
-        orderBy("timestamp", "desc"));
-      const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
-        const notesData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setCreatedPost(notesData);
-      });
-      return () => unsubscribe();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   // fetch data from firestore database
+  //   if (user) { 
+  //     const notesQuery = query(
+  //       collection(db,`posts`), where("createdBy", "==", user.email), 
+  //       orderBy("timestamp", "desc"));
+  //     const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
+  //       const notesData = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data()
+  //       }));
+  //       setCreatedPost(notesData);
+  //     });
+  //     return () => unsubscribe();
+  //   }
+  // }, [user]);
 
   return (
     <div className='py-5'>
       <div className='profile flex justify-center items-center flex-col'>
-        <div className='w-24 h-24 bg-grayTheme rounded-full'></div>
-        <h1 className='my-2 font-semibold text-3xl'>Aditya Rawat</h1>
+        {user?.avatar ? 
+          <div className='flex items-center justify-center bg-green-300 w-24 h-24 rounded-full'>
+            <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
+          </div> 
+          :
+          <div className='flex items-center justify-center bg-green-300 w-24 h-24 rounded-full'>
+            <h1 className='text-4xl font-semibold'>{user?.username?.[0]}</h1>
+          </div>
+        }
+        {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
+        <h1 className='my-2 font-semibold text-4xl'>{user?.username}</h1>
+        <h1 className='font-semibold text-base'>1 Following</h1>
       </div>
       <div className='columns-2 md:columns-3 lg:columns-5 gap-1.5 py-5 '>
         {createdPosts.length > 0 ?

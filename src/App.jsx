@@ -4,6 +4,8 @@ import Layout from "./Layout/Layout";
 import CreatePost from "./Pages/CreatePost";
 import Profile from "./Pages/Profile";
 import Pin from "./Components/Pin";
+import { useData } from "./Context/DataProvider";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +21,7 @@ const router = createBrowserRouter([
         element: <CreatePost />
       },
       {
-        path: '/user',
+        path: '/profile',
         element:<Profile />
       },
       {
@@ -30,7 +32,15 @@ const router = createBrowserRouter([
   }
 ])
 
+
 function App() {
+  const {user} = useData()
+  useEffect(() => {
+    if(user){     
+      localStorage.setItem("userAuth",JSON.stringify(user))
+    }
+  }, [user])
+  
   return (
     <RouterProvider router={router} />
   )

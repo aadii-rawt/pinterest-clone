@@ -65,8 +65,8 @@ function Pin() {
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {morePins?.map((data) => (
-                        <Post data={data} />
+                    {morePins?.map((data,index) => (
+                        <Post key={index} data={data} />
                     ))
                     }
                 </Masonry>

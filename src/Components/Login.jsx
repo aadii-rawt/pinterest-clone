@@ -1,36 +1,59 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { RxCross2 } from 'react-icons/rx';
+import { useData } from '../Context/DataProvider';
+import { users } from '../utils';
+import { json } from 'react-router-dom';
 
 function Login({setShowLoginModel }) {
-
+  const {user,setUser} = useData()
   const [formData,setFormData] = useState({
     email: "",
     password: "",
   })
+  const [error,setError] = useState("")
   function handleData(e){
     const {name,value} = e.target
     setFormData((prev) => ({...prev,[name]:value}))
   }
 
-  async function handleLogin(e){
-    e.preventDefault();
-    if ((formData.email, formData.password)) {
-      try {
-        const usercredential = await signInWithEmailAndPassword(auth, formData.email, formData.password)
+  function handleLogin(e){
+    e.preventDefault()
+    users?.map((u) => {
+      if(u?.email === formData?.email && u?.password === formData?.password){
+        setUser(u)
         setShowLoginModel(false)
         setFormData({
           email: "",
           password: ""
         })
-      } catch (error) {
-        const errorMessage = error?.message;
-        console.log(errorMessage);
+        console.log("login successfully");
+        
+      }else{
+        setError("Invalid email and password")
       }
-    }
+    })
+    console.log("login");
   }
+  // async function handleLogin(e){
+  //   e.preventDefault();
+  //   if ((formData.email, formData.password)) {
+  //     try {
+  //       const usercredential = await signInWithEmailAndPassword(auth, formData.email, formData.password)
+  //       setShowLoginModel(false)
+  //       setFormData({
+  //         email: "",
+  //         password: ""
+  //       })
+  //     } catch (error) {
+  //       const errorMessage = error?.message;
+  //       console.log(errorMessage);
+  //     }
+  //   }
+  // }
+  
   // close login form
   const handleClose = (e) => {
     e.stopPropagation();
@@ -63,8 +86,11 @@ function Login({setShowLoginModel }) {
             onChange={handleData}
             className="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
+          {error && 
+          <div><p className="text-red-700">{error}</p></div>
+          }
           <div className="flex justify-between mb-6">
-            <a href="#" className="text-red-500 text-sm">Forgot your password?</a>
+            <a href="#" className="text-blue-600 text-sm">Forgot your password?</a>
           </div>
           <button type="submit" className="w-full bg-red-500 text-white p-2 rounded-3xl hover:bg-red-600">Log in</button>
         </form>

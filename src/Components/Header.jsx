@@ -2,19 +2,18 @@ import React, { useState } from 'react'
 import Login from './Login'
 import Signup from './Singup'
 import { Link } from 'react-router-dom'
-import { BiBell,BiUserCircle } from 'react-icons/bi'
+import { BiBell, BiUserCircle } from 'react-icons/bi'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../firebase'
 import { MdCancel } from 'react-icons/md'
+import { useData } from '../Context/DataProvider'
 
 function Header() {
   const [searchText, setSearchText] = useState("")
   const [showLinks, setShowLinks] = useState(false) // show links when user click 
   const [showLoginModel, setShowLoginModel] = useState(false) // show login model
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
-  // const [user] = useAuthState(auth)
-  const [user] = useState(true)
-
+  const { user } = useData()
   function handleSingOut() {
     auth.signOut()
   }
@@ -22,7 +21,7 @@ function Header() {
   return (
     <div className='sticky container bg-white inset-0 z-30  flex justify-between items-center py-3'>
       <div className='flex gap-3 items-center'>
-        <img src="logo.png"alt="" className="w-8" />
+        <img src="logo.png" alt="" className="w-8" />
         <div>
           {user ? (
             <div>
@@ -65,7 +64,7 @@ function Header() {
         {user ?
           <>
             <span className=' cursor-pointer' onClick={handleSingOut}><BiBell size={30} /></span>
-            <Link to="user" className=' cursor-pointer'><BiUserCircle size={34} /></Link>
+            <Link to="profile" className=' cursor-pointer'><BiUserCircle size={34} /></Link>
           </> :
           <> <button className='btn bg-grayTheme text-black' onClick={() => setShowLoginModel(true)}>Log in
             {showLoginModel && <Login setShowLoginModel={setShowLoginModel} />}

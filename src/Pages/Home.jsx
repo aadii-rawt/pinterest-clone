@@ -15,10 +15,9 @@ function Home() {
   useEffect(()=>{
     const pinsData = fakePins.map((data) => {
       const userData = users.find((d) => d?.userId === data?.createdBy)
+      
       return {...userData, ...data} 
     })
-    console.log(pinsData);
-    
     setPins(pinsData)
   },[])
 
@@ -92,8 +91,8 @@ function Home() {
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column"
     >
-      {pins?.map((data) => (
-        <Post data={data} />
+      {pins?.map((data,index) => (
+        <Post key={index} data={data} />
       ))
       }
     </Masonry>

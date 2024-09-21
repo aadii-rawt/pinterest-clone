@@ -5,18 +5,12 @@ import { users } from '../utils';
 function PinDetails({ id, pin }) {
     const [userDetails, setUserDetails] = useState(null)
     useEffect(() => {
-        console.log("id :", id);
-        console.log("pin :", pin);
-        
-        
         const userData = users?.find((d) => d?.userId === pin?.createdBy)
         setUserDetails(userData)
-        console.log("user :",userDetails);
-        
     }, [pin])
 
     return (
-        <div className='pindetails py-3'>
+        <div className='pindetails py-3 h-full'>
             <h1 className='font-semibold'>{pin?.title}</h1>
             <p className='text-sm my-1.5'>{pin?.description}</p>
             <p>{pin?.link}</p>

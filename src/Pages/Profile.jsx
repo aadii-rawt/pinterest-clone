@@ -2,7 +2,7 @@ import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestor
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase';
-import Post from '../Components/Post';
+import Post from '../Components/Pin';
 
 function Profile() {
   const [user] = useAuthState(auth)

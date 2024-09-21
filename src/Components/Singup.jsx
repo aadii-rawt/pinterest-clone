@@ -17,12 +17,14 @@ function Signup({ setShowSignupModal }) {
         const { name, value } = e.target
         setFormData((prev) => ({ ...prev, [name]: value }))
     }
+
+
     // handle user singup form
     async function handleSingUp(e) {
         e.preventDefault()
 
         // Check if the username is already taken
-        const usernameDoc = doc(db, "usernames", formData.username);
+        const usernameDoc = doc(db,"usernames", formData.username);
         const usernameSnapshot = await getDoc(usernameDoc);
         if (usernameSnapshot.exists()) {
             //   setError("Username is already taken");
@@ -53,6 +55,8 @@ function Signup({ setShowSignupModal }) {
             }
         }
     }
+
+
     // handle Google Sign up
     const provider = new GoogleAuthProvider();
     async function handleGoogleSignup(e) {

@@ -13,7 +13,7 @@ function Header() {
   const [showLoginModel, setShowLoginModel] = useState(false) // show login model
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
   // const [user] = useAuthState(auth)
-  const [user] = useState(false)
+  const [user] = useState(true)
 
   function handleSingOut() {
     auth.signOut()

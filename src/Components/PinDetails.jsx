@@ -1,7 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CommentList from './CommentList';
+import { users } from '../utils';
 
 function PinDetails({ id, pin }) {
+    const [userDetails, setUserDetails] = useState(null)
+    useEffect(() => {
+        console.log("id :", id);
+        console.log("pin :", pin);
+        
+        
+        const userData = users?.find((d) => d?.userId === pin?.createdBy)
+        setUserDetails(userData)
+        console.log("user :",userDetails);
+        
+    }, [pin])
+
     return (
         <div className='pindetails py-3'>
             <h1 className='font-semibold'>{pin?.title}</h1>
@@ -10,8 +23,12 @@ function PinDetails({ id, pin }) {
             <p>{pin?.tags}</p>
             <div className='flex justify-between items-center'>
                 <div className='flex items-center gap-2'>
-                    <img src="" alt="" className='w-9 h-9 rounded-full my-4' />
-                    <p className='text-sm'>{pin?.createdBy}</p>
+                    {userDetails?.avatar ?
+                        <img src={`../../public/${userDetails?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
+                        :
+                    <div className='w-8 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{userDetails?.username?.[0]}</div>
+                    }
+                    <p className='text-sm'>{userDetails?.username}</p>
                 </div>
                 <div><button className='btn border border-gray-700 md:px-3 md:py-1.5'>Follow</button></div>
             </div>

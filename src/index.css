@@ -13,3 +13,43 @@
 /* ::-webkit-scrollbar{
     display: none;
 } */
+
+/* Masonry grid container */
+.my-masonry-grid {
+    display: flex;
+    margin-left: -30px; /* gutter size offset */
+    width: auto;
+  }
+  
+  /* Masonry grid columns */
+  .my-masonry-grid_column {
+    padding-left: 30px; /* gutter size */
+    background-clip: padding-box;
+  }
+  
+  /* Style individual pins */
+  .pin {
+    background-color: #fff;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .pin img {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .pin h3 {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .pin p {
+    padding: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  

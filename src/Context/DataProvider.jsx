@@ -4,7 +4,8 @@ const dataContext = createContext();
 
 export default function DataProvider({ children }) {
     const [user, setUser] = useState(null)
-    return <dataContext.Provider value={{ user,setUser }}>
+    const [showLoginModel, setShowLoginModel] = useState(false)
+    return <dataContext.Provider value={{ user, setUser, showLoginModel, setShowLoginModel }}>
         {children}
     </dataContext.Provider>
 }

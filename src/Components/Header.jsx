@@ -10,10 +10,9 @@ import { useData } from '../Context/DataProvider'
 
 function Header() {
   const [searchText, setSearchText] = useState("")
-  const [showLinks, setShowLinks] = useState(false) // show links when user click 
-  const [showLoginModel, setShowLoginModel] = useState(false) // show login model
+  const [showLinks, setShowLinks] = useState(false) // show links when user click  // show login model
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
-  const { user } = useData()
+  const { user,showLoginModel, setShowLoginModel } = useData()
   function handleSingOut() {
     auth.signOut()
   }
@@ -67,7 +66,7 @@ function Header() {
             <Link to="profile" className=' cursor-pointer'><BiUserCircle size={34} /></Link>
           </> :
           <> <button className='btn bg-grayTheme text-black' onClick={() => setShowLoginModel(true)}>Log in
-            {showLoginModel && <Login setShowLoginModel={setShowLoginModel} />}
+            {showLoginModel && <Login  />}
           </button>
             <button className='btn bg-redTheme text-white' onClick={() => setShowSignupModal(true)}>Sign up
               {showSignupModal && <Signup setShowSignupModal={setShowSignupModal} />}

@@ -7,12 +7,15 @@ import { IoMdSend } from 'react-icons/io';
 import { useData } from '../Context/DataProvider'
 function Comment({ id }) {
 
-  const {user} = useData()
+  const {user,setShowLoginModel} = useData()
 
   const [newComment, setNewComment] = useState("");
   // const [user] = useAuthState(auth)
   // // add new comment
   async function handleCommentSubmit() {
+    if (!user) {
+      return setShowLoginModel(true)
+    }
     if (newComment.trim() && user) {
       await addDoc(collection(db, "posts", id, "comments"), {
         username: user?.displayName,

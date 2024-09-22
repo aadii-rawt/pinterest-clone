@@ -7,8 +7,8 @@ import { useData } from '../Context/DataProvider';
 import { users } from '../utils';
 import { json } from 'react-router-dom';
 
-function Login({setShowLoginModel }) {
-  const {user,setUser} = useData()
+function Login({ }) {
+  const {user,setUser,setShowLoginModel} = useData()
   const [formData,setFormData] = useState({
     email: "",
     password: "",
@@ -100,7 +100,7 @@ function Login({setShowLoginModel }) {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
         <button className="w-full bg-white text-gray-700 p-2 border border-gray-300 rounded-3xl hover:bg-gray-100">Continue with Google</button>
-        <span className='absolute top-5 right-5 z-10 cursor-pointer p-2 rounded-full hover:bg-grayTheme' onClick={handleClose}><RxCross2 size={22} /></span>
+        <button className='absolute top-5 right-5 z-10 cursor-pointer p-2 rounded-full hover:bg-grayTheme' onClick={handleClose}><RxCross2 size={22} /></button>
       </div>
     </div>,
     document.getElementById("portal")

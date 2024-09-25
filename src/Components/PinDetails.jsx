@@ -18,7 +18,7 @@ function PinDetails({ id, pin }) {
             <div className='flex justify-between items-center'>
                 <div className='flex items-center gap-2'>
                     {userDetails?.avatar ?
-                        <img src={`../../public/${userDetails?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
+                        <img src={`/${userDetails?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
                         :
                     <div className='w-8 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{userDetails?.username?.[0]}</div>
                     }

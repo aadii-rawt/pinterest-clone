@@ -32,7 +32,7 @@ function Comment({ id }) {
         <div>
           {
              user?.avatar ? 
-             <img src={`../../public/${user?.avatar}`} alt="" className='w-11 h-8 rounded-full' />
+             <img src={`/${user?.avatar}`} alt="" className='w-11 h-8 rounded-full' />
              :
              <div className='w-11 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{user?.username[0]}</div>
           }

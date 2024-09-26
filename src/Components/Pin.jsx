@@ -40,11 +40,11 @@ function Pin() {
     return (
         <div>
             <div className='w-full flex items-center justify-center'>
-                <div className='w-3/5 relative flex overflow-hidden rounded-3xl shadow-[0_0px_20px_2px_rgba(0,0,0,0.3)]'>
-                    <div className='w-1/2'>
+                <div className='w-full lg:w-3/5 relative flex flex-col lg:flex-row  overflow-hidden rounded-3xl shadow-[0px_4px_6px_1px_rgba(0,0,0,0.2),_0px_2px_4px_1px_rgba(0,0,0,0.08)]'>
+                    <div className='w-full lg:w-1/2 flex items-center justify-center'>
                         <img src={`/${pin?.img}`} alt="" />
                     </div>
-                    <div className='w-1/2 h-full px-3 py-5 relative'>
+                    <div className='w-full lg:w-1/2 h-full px-3 py-5 relative'>
                         <div className='flex justify-between items-center'>
                             <div className='flex gap-3 justify-around'>
                                 <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2'><IoMdShare size={22} color='black' /></div>

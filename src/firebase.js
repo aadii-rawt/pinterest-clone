@@ -1,16 +1,22 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDkmk-A-r0J2fRMvHm748Gp7-sfscxlUFA",
-  authDomain: "pinterest-39f68.firebaseapp.com",
-  projectId: "pinterest-39f68",
-  storageBucket: "pinterest-39f68.appspot.com",
-  messagingSenderId: "931850443941",
-  appId: "1:931850443941:web:37dc361a1d531da777c14c"
+  apiKey: "AIzaSyAHfFX7z7XhZ6jMdX3v7DQKmQmnYeVDkbg",
+  authDomain: "pinterest-e216c.firebaseapp.com",
+  projectId: "pinterest-e216c",
+  storageBucket: "pinterest-e216c.appspot.com",
+  messagingSenderId: "17674480816",
+  appId: "1:17674480816:web:768c4c0006ecee3307df75"
 };
 
+// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 export const db = getFirestore(app);

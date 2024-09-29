@@ -4,10 +4,12 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase';
 import Post from '../Components/Pin';
 import { useData } from '../Context/DataProvider';
+import EditAvatar from '../Components/EditAvatar';
 
 function Profile() {
-  const {user} = useData()
-  const [createdPosts,setCreatedPost] = useState([])
+  const { user } = useData()
+  const [createdPosts, setCreatedPost] = useState([])
+  const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   // useEffect(() => {
   //   // fetch data from firestore database
   //   if (user) { 
@@ -25,13 +27,14 @@ function Profile() {
   //   }
   // }, [user]);
 
+
   return (
-    <div className='py-5'>
-      <div className='profile flex justify-center items-center flex-col'>
-        {user?.avatar ? 
+    <div className='py-5 relative'>
+      <div className='profile flex justify-center items-center flex-col cursor-pointer' onClick={() => setIsEditAvatarOpen(true)}>
+        {user?.avatar ?
           <div className='flex items-center justify-center bg-green-300 w-24 h-24 rounded-full'>
             <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
-          </div> 
+          </div>
           :
           <div className='flex items-center justify-center bg-green-300 w-24 h-24 rounded-full'>
             <h1 className='text-4xl font-semibold'>{user?.username?.[0]}</h1>
@@ -46,6 +49,9 @@ function Profile() {
           createdPosts.map((post) => <Post key={post.id} post={post} />) :
           <span>No post created yet</span>}
       </div>
+
+      {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} />}
+
     </div>
   )
 }

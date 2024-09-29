@@ -7,7 +7,7 @@ import { IoMdSend } from 'react-icons/io';
 import { useData } from '../Context/DataProvider'
 function Comment({ id }) {
 
-  const {user,setShowLoginModel} = useData()
+  const { user, setShowLoginModel } = useData()
 
   const [newComment, setNewComment] = useState("");
   // const [user] = useAuthState(auth)
@@ -26,20 +26,16 @@ function Comment({ id }) {
     }
   }
   return (
-    <div className='flex items-center justify-center gap-2 sticky bottom-0 left-0'>
-      {
-        user && 
-        <div>
-          {
-             user?.avatar ? 
-             <img src={`/${user?.avatar}`} alt="" className='w-11 h-8 rounded-full' />
-             :
-             <div className='w-11 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{user?.username[0]}</div>
-          }
-        </div>
-        
-      }
-      <div className='w-full' >
+    <div className='flex items-center justify-between gap-2'>
+      {user && <div className='flex items-center justify-center'>
+        {
+          user?.avatar ?
+            <img src={`/${user?.avatar}`} alt="" className='w-9 h-9 rounded-full' />
+            :
+            <div className='w-9 h-9 rounded-full bg-red-400 flex items-center justify-center text-white text-lg'>{user?.username[0]}</div>
+        }
+      </div>}
+      <div className='flex-auto' >
         <form action="">
           <textarea
             name="comment"
@@ -49,7 +45,7 @@ function Comment({ id }) {
             className='text-sm w-full resize-none px-2 py-2 border outline-none border-gray-400 rounded-3xl' id=""></textarea>
         </form>
       </div>
-      <div className='w-11 h-8 cursor-pointer rounded-full bg-green-700 flex items-center justify-center'>
+      <div className='w-9 h-9 cursor-pointer rounded-full bg-green-700 flex items-center justify-center'>
         <button onClick={handleCommentSubmit}><IoMdSend color='white' /></button>
       </div>
     </div>

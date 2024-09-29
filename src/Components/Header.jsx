@@ -12,7 +12,7 @@ function Header() {
   const [searchText, setSearchText] = useState("")
   const [showLinks, setShowLinks] = useState(false) // show links when user click  // show login model
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
-  const { user,showLoginModel, setShowLoginModel } = useData()
+  const { user, showLoginModel, setShowLoginModel } = useData()
   function handleSingOut() {
     auth.signOut()
   }
@@ -59,21 +59,27 @@ function Header() {
             }}><MdCancel size={22} /></span>
         }
       </div>
-      <div className='flex gap-3 items-center overflow-hidden'>
+      <div className='flex gap-2 items-center overflow-hidden'>
         {user ?
           <>
             <span className=' cursor-pointer' onClick={handleSingOut}><BiBell size={30} /></span>
-            <Link to="profile" className=' cursor-pointer'><BiUserCircle size={34} /></Link>
+            <Link to="profile" className=' cursor-pointer'>
+              {user?.avatar ?
+                <img src={`/${user?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
+                :
+                <div className='w-8 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{user?.username[0]}</div>
+              }
+            </Link>
           </> :
           <> <button className='btn bg-grayTheme text-black' onClick={() => setShowLoginModel(true)}>Log in
-            {showLoginModel && <Login  />}
+            {showLoginModel && <Login />}
           </button>
             <button className='btn bg-redTheme text-white' onClick={() => setShowSignupModal(true)}>Sign up
               {showSignupModal && <Signup setShowSignupModal={setShowSignupModal} />}
             </button></>}
       </div>
 
-    </div>
+    </div >
   )
 }
 

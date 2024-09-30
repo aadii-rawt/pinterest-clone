@@ -10,8 +10,6 @@ import { IoMdShare } from 'react-icons/io';
 import { fakePins, users } from '../utils'
 import Masonry from 'react-masonry-css';
 import Post from './Post';
-// import Img from '../../public/img4.jpg'
-
 function Pin() {
     const { id } = useParams()
     const [pin, setPin] = useState(null)

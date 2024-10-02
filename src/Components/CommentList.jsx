@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { commentsData, users } from '../utils'; // Import the users and comments data
+// import { commentsData,} from '../utils'; // Import the users and comments data
+import { useData } from '../Context/DataProvider';
 
 function CommentList({ id }) {
     const [comments, setComments] = useState([]); // comment list
+    const {users,commentsData} = useData()
 
     useEffect(() => {
         // Fetch the comments based on the pin ID

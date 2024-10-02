@@ -7,15 +7,17 @@ import PinDetails from './PinDetails';
 import Comment from './Comment';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { IoMdShare } from 'react-icons/io';
-import { fakePins, users } from '../utils'
+// import { fakePins } from '../utils'
 import Masonry from 'react-masonry-css';
 import Post from './Post';
+import { useData } from '../Context/DataProvider';
 // import Img from '../../public/img4.jpg'
 
 function Pin() {
     const { id } = useParams()
     const [pin, setPin] = useState(null)
     const [morePins,setMorePins] = useState([])
+    const {users,fakePins} = useData()
     useEffect(() => {
         const p = fakePins?.find((data) => data.id === id)
         setPin(p)
@@ -41,7 +43,7 @@ function Pin() {
         <div>
             <div className='w-full flex items-center justify-center'>
                 <div className='w-full lg:w-3/5 relative flex flex-col lg:flex-row  overflow-hidden rounded-3xl shadow-[0px_4px_6px_1px_rgba(0,0,0,0.2),_0px_2px_4px_1px_rgba(0,0,0,0.08)]'>
-                    <div className='w-full lg:w-1/2 flex items-center justify-center'>
+                    <div className='w-full lg:w-1/2 flex items-center justify-center' >
                         <img src={`/${pin?.img}`} alt="" />
                     </div>
                     <div className='w-full lg:w-1/2 h-full px-3 py-5 relative'>

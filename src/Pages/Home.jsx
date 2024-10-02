@@ -4,10 +4,10 @@ import { db } from '../firebase';
 import { collection, doc, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useData } from '../Context/DataProvider';
 import Post from '../Components/Post';
-import { fakePins, users } from '../utils'
+// import { fakePins, users } from '../utils'
 import Masonry from 'react-masonry-css';
 function Home() {
-  const [pins, setPins] = useState([])
+  const [pins, setPins, fakePins,users] = useState([])
   const [lastDoc, setLastDoc] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);

@@ -4,11 +4,11 @@ import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { RxCross2 } from 'react-icons/rx';
 import { useData } from '../Context/DataProvider';
-import { users } from '../utils';
+// import { users } from '../utils';
 import { json } from 'react-router-dom';
 
 function Login({ }) {
-  const {user,setUser,setShowLoginModel} = useData()
+  const {user,setUser,setShowLoginModel,users} = useData()
   const [formData,setFormData] = useState({
     email: "",
     password: "",

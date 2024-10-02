@@ -79,13 +79,17 @@ export const users = [
     email: "test@gmail.com",
     userId: 1,
     avatar: "",
+    following: [2,3,4],
+    follower: [3]
   },
   {
     username: "Walter White",
     password:"@12345",
     email: "test2@gmail.com",
     userId: 2,
-    avatar: "img3.jpg"
+    avatar: "img3.jpg",
+    following: [2,3,4],
+    follower: [3]
   },
   {
     username: "Thomas ",

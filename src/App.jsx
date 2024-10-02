@@ -29,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/pin/:id",
         element: <Pin />
+      },
+      {
+        path: "/user/:id",
+        element: <Profile />
       }
     ]
   }

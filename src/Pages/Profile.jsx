@@ -27,22 +27,24 @@ function Profile() {
   //   }
   // }, [user]);
 
+  console.log(user);
+  
 
   return (
     <div className='py-5 relative'>
-      <div className='profile flex justify-center items-center flex-col cursor-pointer' onClick={() => setIsEditAvatarOpen(true)}>
+      <div className='profile flex justify-center items-center flex-col ' >
         {user?.avatar ?
-          <div className='flex items-center justify-center bg-green-300 w-24 h-24 rounded-full'>
+          <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full' onClick={() => setIsEditAvatarOpen(true)}>
             <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
           </div>
           :
-          <div className='flex items-center justify-center bg-green-300 w-24 h-24 rounded-full'>
+          <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full' onClick={() => setIsEditAvatarOpen(true)}>
             <h1 className='text-4xl font-semibold'>{user?.username?.[0]}</h1>
           </div>
         }
         {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
         <h1 className='my-2 font-semibold text-4xl'>{user?.username}</h1>
-        <h1 className='font-semibold text-base'>1 Following</h1>
+        <h1 className='font-semibold text-base'>{user?.following?.length} Following</h1>
       </div>
       <div className='columns-2 md:columns-3 lg:columns-5 gap-1.5 py-5 '>
         {createdPosts.length > 0 ?

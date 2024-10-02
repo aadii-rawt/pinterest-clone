@@ -55,7 +55,7 @@ function CreatePost() {
           <div className='' >
             <img src={URL.createObjectURL(img)} alt="" />
           </div> :
-          <div className='w-full h-full my-4 flex items-center rounded-3xl justify-center border-2 border-black'>
+          <div className='w-full h-full my-4 flex items-center rounded-3xl justify-center  border-dashed border-2 border-black/70'>
             <span > Click to upload</span>
           </div>
         }

@@ -7,7 +7,8 @@ import Post from '../Components/Post';
 // import { fakePins, users } from '../utils'
 import Masonry from 'react-masonry-css';
 function Home() {
-  const [pins, setPins, fakePins,users] = useState([])
+  const [pins, setPins] = useState([])
+  const {fakePins,users} = useData()
   const [lastDoc, setLastDoc] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);

@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Header from '../Components/Header'
 import { Outlet } from 'react-router-dom'
 
 function Layout() {
   return (
     <>
-        <Header />
+      <Header />
       <div className='container'>
-        <Outlet />
+        <Suspense>
+          <Outlet />
+        </Suspense>
       </div>
     </>
   )

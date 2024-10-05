@@ -1,12 +1,12 @@
+import { lazy, useEffect } from "react";
 import Home from "./Pages/Home";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import CreatePost from "./Pages/CreatePost";
-import Profile from "./Pages/Profile";
-import Pin from "./Components/Pin";
 import { useData } from "./Context/DataProvider";
-import { useEffect } from "react";
 import ProtectedRoute from "./Components/ProtectedRoute";
+const Pin = lazy(() => import('./Components/Pin'))
+const Profile = lazy(() => import('./Pages/Profile'))
 
 
 const router = createBrowserRouter([

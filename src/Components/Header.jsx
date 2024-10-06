@@ -67,7 +67,7 @@ function Header() {
               {user?.avatar ?
                 <img src={`/${user?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
                 :
-                <div className='w-8 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{user?.username[0]}</div>
+                <div className='w-8 h-8 rounded-full bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
               }
             </Link>
           </> :

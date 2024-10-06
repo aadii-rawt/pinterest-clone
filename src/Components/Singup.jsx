@@ -5,8 +5,10 @@ import { auth, db } from '../firebase';
 import { GoogleAuthProvider } from 'firebase/auth/web-extension';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { RxCross2 } from 'react-icons/rx';
+import { useData } from '../Context/DataProvider';
 
 function Signup({ setShowSignupModal }) {
+    const {user,setUser} = useData()
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -23,36 +25,44 @@ function Signup({ setShowSignupModal }) {
     // handle user signup form
     async function handleSignup(e) {
         e.preventDefault();
-
-        // Check if the username is already taken
-        const usernameDoc = doc(db, "usernames", formData.username);
+    
+        const usernameDoc = doc(db, "usernames", formData?.username);
         const usernameSnapshot = await getDoc(usernameDoc);
-
+    
         if (usernameSnapshot.exists()) {
             setError("Username is already taken.");
             return;
         }
-
+    
         if (formData.email && formData.password && formData.username) {
             try {
                 // Sign up user with email and password
                 const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-
+    
                 // Update the user's profile with the username
-                await updateProfile(userCredential.user, { displayName: formData.username });
-
-                // Store the username to prevent duplicates
-                await setDoc(doc(db, "usernames", formData.username), { uid: userCredential.user.uid });
-
-                // Store user details in the Firestore "users" collection
-                await setDoc(doc(db, "users", userCredential.user.uid), {
+                await updateProfile(userCredential.user, { displayName: formData?.username });
+    
+                // Store the username in Firestore to prevent duplicates
+                await setDoc(doc(db, "usernames", formData?.username), { uid: userCredential?.user?.uid });
+    
+                // Create the user data object
+                const userData = {
                     email: formData.email,
                     username: formData.username,
                     createdAt: serverTimestamp(),
-                    uid: userCredential.user.uid
-                });
-
-                // Reset form data and close signup modal
+                    userId: userCredential.user.uid,
+                    avatar: "",
+                    following: [],
+                    follower: []
+                };
+    
+                // Store user details in the Firestore "users" collection
+                await setDoc(doc(db, "users", userCredential.user.uid), userData);
+    
+                // Set the user state directly with userData
+                setUser(userData);
+    
+                // Reset form data and close the signup modal
                 setFormData({
                     email: "",
                     password: "",
@@ -68,7 +78,7 @@ function Signup({ setShowSignupModal }) {
             setError("All fields are required.");
         }
     }
-
+    
     // handle Google Sign up
     const provider = new GoogleAuthProvider();
     async function handleGoogleSignup(e) {

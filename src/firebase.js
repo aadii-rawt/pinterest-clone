@@ -8,12 +8,12 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAHfFX7z7XhZ6jMdX3v7DQKmQmnYeVDkbg",
-  authDomain: "pinterest-e216c.firebaseapp.com",
-  projectId: "pinterest-e216c",
-  storageBucket: "pinterest-e216c.appspot.com",
-  messagingSenderId: "17674480816",
-  appId: "1:17674480816:web:768c4c0006ecee3307df75"
+  apiKey: "AIzaSyCFSW0rNqDPJvMElyQEhMphxCm73XjR9xg",
+  authDomain: "pinterest-clone-6e6f8.firebaseapp.com",
+  projectId: "pinterest-clone-6e6f8",
+  storageBucket: "pinterest-clone-6e6f8.appspot.com",
+  messagingSenderId: "37661118337",
+  appId: "1:37661118337:web:99b739ea007e8af69b2280"
 };
 
 // Initialize Firebase

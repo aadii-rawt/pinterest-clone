@@ -39,11 +39,11 @@ function Profile() {
           </div>
           :
           <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full' onClick={() => setIsEditAvatarOpen(true)}>
-            <h1 className='text-4xl font-semibold'>{user?.username?.[0]}</h1>
+            <h1 className='text-4xl font-semibold capitalize'>{user?.username?.[0]}</h1>
           </div>
         }
         {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
-        <h1 className='my-2 font-semibold text-4xl'>{user?.username}</h1>
+        <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
         <h1 className='font-semibold text-base'>{user?.following?.length} Following</h1>
       </div>
       <div className='columns-2 md:columns-3 lg:columns-5 gap-1.5 py-5 '>

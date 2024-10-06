@@ -3,6 +3,7 @@ import { auth, db, imgDb } from '../firebase'
 import { getDownloadURL, list, ref, uploadBytes } from 'firebase/storage'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { GoPlusCircle } from 'react-icons/go'
 
 function CreatePost() {
   const [user] = useAuthState(auth)
@@ -55,7 +56,8 @@ function CreatePost() {
           <div className='' >
             <img src={URL.createObjectURL(img)} alt="" />
           </div> :
-          <div className='w-full h-full my-4 flex items-center rounded-3xl justify-center  border-dashed border-2 border-black/70'>
+          <div className='w-full h-full my-4 flex  flex-col items-center rounded-3xl justify-center  border-dashed border-2 border-black/70'>
+            <GoPlusCircle size={28}/>
             <span > Click to upload</span>
           </div>
         }

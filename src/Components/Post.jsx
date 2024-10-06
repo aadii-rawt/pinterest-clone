@@ -30,7 +30,7 @@ function Post({ data }) {
         {data?.avatar ? 
         <img src={`/${data?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
         : 
-        <div className='w-8 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{data?.username[0]}</div>
+        <div className='w-8 h-8 rounded-full capitalize bg-red-400 flex items-center justify-center text-white'>{data?.username[0]}</div>
         }
         <p className='text-nowrap  text-ellipsis overflow-hidden '>{data?.username}</p>
       </div>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { RxCross2 } from 'react-icons/rx';
 import { useData } from '../Context/DataProvider';
 // import { users } from '../utils';
 import { json } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
 
 function Login({ }) {
   const {user,setUser,setShowLoginModel,users} = useData()
@@ -19,40 +20,65 @@ function Login({ }) {
     setFormData((prev) => ({...prev,[name]:value}))
   }
 
-  function handleLogin(e){
-    e.preventDefault()
-    users?.map((u) => {
-      if(u?.email === formData?.email && u?.password === formData?.password){
-        setUser(u)
-        setShowLoginModel(false)
-        setFormData({
-          email: "",
-          password: ""
-        })
-        console.log("login successfully");
-        
-      }else{
-        setError("Invalid email and password")
-      }
-    })
-    console.log("login");
-  }
-  // async function handleLogin(e){
-  //   e.preventDefault();
-  //   if ((formData.email, formData.password)) {
-  //     try {
-  //       const usercredential = await signInWithEmailAndPassword(auth, formData.email, formData.password)
+  // function handleLogin(e){
+  //   e.preventDefault()
+  //   users?.map((u) => {
+  //     if(u?.email === formData?.email && u?.password === formData?.password){
+  //       setUser(u)
   //       setShowLoginModel(false)
   //       setFormData({
   //         email: "",
   //         password: ""
   //       })
-  //     } catch (error) {
-  //       const errorMessage = error?.message;
-  //       console.log(errorMessage);
+  //       console.log("login successfully");
+        
+  //     }else{
+  //       setError("Invalid email and password")
   //     }
-  //   }
+  //   })
+  //   console.log("login");
   // }
+
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    setError(""); // Clear previous errors
+  
+    if (formData.email && formData.password) {
+      try {
+        // Authenticate user with email and password
+        const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+        
+        // Get the user ID from the authenticated user
+        const uid = userCredential.user.uid;
+  
+        // Fetch user details from Firestore using the uid
+        const userDoc = await getDoc(doc(db, "users", uid));
+        if (userDoc.exists()) {
+          // Set the user state with fetched user data
+          setUser(userDoc.data());
+  
+          // Close login modal and reset form data
+          setShowLoginModel(false);
+          setFormData({
+            email: "",
+            password: ""
+          });
+          console.log("Login successful!");
+        } else {
+          console.log("No such user found in Firestore.");
+          setError("User data not found.");
+        }
+      } catch (error) {
+        const errorMessage = error?.message;
+        console.error("Error during login:", errorMessage);
+        setError("Invalid email or password.");
+      }
+    } else {
+      setError("Please enter both email and password.");
+    }
+  }
+  
   
   // close login form
   const handleClose = (e) => {

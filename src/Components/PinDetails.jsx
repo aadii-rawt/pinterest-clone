@@ -23,7 +23,7 @@ function PinDetails({ id, pin }) {
                     {userDetails?.avatar ?
                         <img src={`/${userDetails?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
                         :
-                        <div className='w-8 h-8 rounded-full bg-red-400 flex items-center justify-center text-white'>{userDetails?.username?.[0]}</div>
+                        <div className='w-8 h-8 rounded-full capitalize bg-red-400 flex items-center justify-center text-white'>{userDetails?.username?.[0]}</div>
                     }
                     <p className='text-sm'>{userDetails?.username}</p>
                 </Link>

@@ -16,20 +16,51 @@ import { useData } from '../Context/DataProvider';
 function Pin() {
     const { id } = useParams()
     const [pin, setPin] = useState(null)
-    const [morePins,setMorePins] = useState([])
-    const {users,fakePins} = useData()
+    const [userDetails, setUserDetails] = useState({})
+    const [morePins, setMorePins] = useState([])
+    const { users, fakePins } = useData()
     useEffect(() => {
-        const p = fakePins?.find((data) => data.id === id)
-        setPin(p)
-    }, [id])
+        const fetchPin = async () => {
+            try {
+                const postDocRef = doc(db, 'posts', id);
+                const postDoc = await getDoc(postDocRef);
+        
+                if (postDoc.exists()) {
+                    const postData = postDoc.data();
+                    console.log('Post found:', postData);
+                    setPin(postData);
+        
+                    const userDocRef = doc(db, 'users', postData?.createdBy);
+                    const userDoc = await getDoc(userDocRef);
+        
+                    if (userDoc.exists()) {
+                        setUserDetails(userDoc.data());
+                        console.log('User details:', userDoc.data());
+                    } else {
+                        console.log('No such user!');
+                    }
+                } else {
+                    console.log('No such post!');
+                }
+            } catch (error) {
+                console.error('Error fetching post: ', error);
+            }
+        };
+        
 
-    useEffect(()=>{
+        console.log(pin);
+
+
+        fetchPin();
+    }, [id]);
+
+    useEffect(() => {
         const morePinsData = fakePins.map((data) => {
-          const userData = users.find((d) => d?.userId === data?.createdBy)
-          return {...userData, ...data} 
+            const userData = users.find((d) => d?.userId === data?.createdBy)
+            return { ...userData, ...data }
         })
         setMorePins(morePinsData)
-      },[])
+    }, [])
 
     const breakpointColumnsObj = {
         default: 4,
@@ -67,7 +98,7 @@ function Pin() {
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {morePins?.map((data,index) => (
+                    {morePins?.map((data, index) => (
                         <Post key={index} data={data} />
                     ))
                     }

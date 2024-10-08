@@ -24,46 +24,46 @@ function CreatePost() {
 
   // Add post to the database
   async function handleSubmit(e) {
-    e.preventDefault();
+    // e.preventDefault();
 
-    try {
-      // Upload image to Firebase Storage
-      const refrs = ref(imgDb, `posts/${crypto.randomUUID()}`);
-      const data = await uploadBytes(refrs, img);
-      const imgURL = await getDownloadURL(data.ref);
+    // try {
+    //   // Upload image to Firebase Storage
+    //   const refrs = ref(imgDb, `posts/${crypto.randomUUID()}`);
+    //   const data = await uploadBytes(refrs, img);
+    //   const imgURL = await getDownloadURL(data.ref);
 
-      // Add document to Firestore (ID will be generated automatically)
-      const postDocRef = await addDoc(collection(db, 'posts'), {
-        ...formData,
-        img: imgURL,
-        createdBy: user?.userId,
-        createdAt: serverTimestamp(),
-      });
+    //   // Add document to Firestore (ID will be generated automatically)
+    //   const postDocRef = await addDoc(collection(db, 'posts'), {
+    //     ...formData,
+    //     img: imgURL,
+    //     createdBy: user?.userId,
+    //     createdAt: serverTimestamp(),
+    //   });
 
-      // Get the generated document ID
-      const postId = postDocRef?.id;
+    //   // Get the generated document ID
+    //   const postId = postDocRef?.id;
 
-      // Now update the post with the generated post ID
-      await addDoc(collection(db, 'posts'), {
-        id: postId,
-        ...formData,
-        img: imgURL,
-        createdBy: user?.userId,
-        createdAt: serverTimestamp(),
-      });
+    //   // Now update the post with the generated post ID
+    //   await addDoc(collection(db, 'posts'), {
+    //     id: postId,
+    //     ...formData,
+    //     img: imgURL,
+    //     createdBy: user?.userId,
+    //     createdAt: serverTimestamp(),
+    //   });
 
-      // Clear post inputs
-      setFormData({
-        title: '',
-        img: '',
-        description: '',
-        link: '',
-        tags: '',
-      });
-      setImg();
-    } catch (error) {
-      console.error('Error creating post:', error);
-    }
+    //   // Clear post inputs
+    //   setFormData({
+    //     title: '',
+    //     img: '',
+    //     description: '',
+    //     link: '',
+    //     tags: '',
+    //   });
+    //   setImg();
+    // } catch (error) {
+    //   console.error('Error creating post:', error);
+    // }
   }
 
   return (

@@ -68,9 +68,9 @@ function Home() {
     500: 2
   };
 
-  if (loading) {
-    return <Shimmer />
-  }
+  // if (loading) {
+  //   return <Shimmer />
+  // }
 
 
   return (

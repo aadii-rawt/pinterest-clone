@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth, db, imgDb } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useData } from '../Context/DataProvider';
 
@@ -24,47 +24,41 @@ function CreatePost() {
 
   // Add post to the database
   async function handleSubmit(e) {
-    // e.preventDefault();
+    e.preventDefault();
 
-    // try {
-    //   // Upload image to Firebase Storage
-    //   const refrs = ref(imgDb, `posts/${crypto.randomUUID()}`);
-    //   const data = await uploadBytes(refrs, img);
-    //   const imgURL = await getDownloadURL(data.ref);
+    try {
+        // Upload image to Firebase Storage
+        const refrs = ref(imgDb, `posts/${crypto.randomUUID()}`);
+        const data = await uploadBytes(refrs, img);
+        const imgURL = await getDownloadURL(data.ref);
 
-    //   // Add document to Firestore (ID will be generated automatically)
-    //   const postDocRef = await addDoc(collection(db, 'posts'), {
-    //     ...formData,
-    //     img: imgURL,
-    //     createdBy: user?.userId,
-    //     createdAt: serverTimestamp(),
-    //   });
+        // Manually create a document ID
+        const postId = crypto.randomUUID(); // Generate a unique ID
 
-    //   // Get the generated document ID
-    //   const postId = postDocRef?.id;
+        // Use setDoc to add the post with a specific document ID
+        await setDoc(doc(db, 'posts', postId), {
+            id: postId, // Assign the post ID to be the same as the document ID
+            ...formData,
+            img: imgURL,
+            createdBy: user?.userId,
+            createdAt: serverTimestamp(),
+        });
 
-    //   // Now update the post with the generated post ID
-    //   await addDoc(collection(db, 'posts'), {
-    //     id: postId,
-    //     ...formData,
-    //     img: imgURL,
-    //     createdBy: user?.userId,
-    //     createdAt: serverTimestamp(),
-    //   });
+        // Clear post inputs
+        setFormData({
+            title: '',
+            img: '',
+            description: '',
+            link: '',
+            tags: '',
+        });
+        setImg();
 
-    //   // Clear post inputs
-    //   setFormData({
-    //     title: '',
-    //     img: '',
-    //     description: '',
-    //     link: '',
-    //     tags: '',
-    //   });
-    //   setImg();
-    // } catch (error) {
-    //   console.error('Error creating post:', error);
-    // }
-  }
+        console.log('Post created with ID:', postId);
+    } catch (error) {
+        console.error('Error creating post:', error);
+    }
+}
 
   return (
     <div className='grid md:grid-cols-2 items-center justify-items-center py-5'>

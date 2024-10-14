@@ -75,7 +75,7 @@ function Pin() {
             <div className='w-full flex items-center justify-center'>
                 <div className='w-full lg:w-3/5 relative flex flex-col lg:flex-row  overflow-hidden rounded-3xl shadow-[0px_4px_6px_1px_rgba(0,0,0,0.2),_0px_2px_4px_1px_rgba(0,0,0,0.08)]'>
                     <div className='w-full lg:w-1/2 flex items-center justify-center' >
-                        <img src={`/${pin?.img}`} alt="" />
+                        <img src={pin?.img} alt="" />
                     </div>
                     <div className='w-full lg:w-1/2 h-full px-3 py-5 relative'>
                         <div className='flex justify-between items-center'>

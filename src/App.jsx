@@ -5,6 +5,7 @@ import Layout from "./Layout/Layout";
 import CreatePost from "./Pages/CreatePost";
 import { useData } from "./Context/DataProvider";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import UserProfile from "./Pages/UserProfile";
 const Pin = lazy(() => import('./Components/Pin'))
 const Profile = lazy(() => import('./Pages/Profile'))
 
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/:id",
-        element: <Profile />
+        element: <UserProfile />
       }
     ]
   }

@@ -23,12 +23,9 @@ function Pin() {
         
                 if (postDoc.exists()) {
                     const postData = postDoc.data();
-                    console.log('Post found:', postData);
                     setPin(postData);
-        
                     const userDocRef = doc(db, 'users', postData?.createdBy);
-                    const userDoc = await getDoc(userDocRef);
-        
+                    const userDoc = await getDoc(userDocRef);     
                     if (userDoc.exists()) {
                         setUserDetails(userDoc.data());
                         console.log('User details:', userDoc.data());
@@ -42,7 +39,6 @@ function Pin() {
                 console.error('Error fetching post: ', error);
             }
         };
-        
 
         console.log(pin);
 
@@ -81,7 +77,7 @@ function Pin() {
                             </div>
                             <div><button className='btn bg-redTheme text-white md:px-3 md:py-1.5'>Save</button></div>
                         </div>
-                        <PinDetails id={id} pin={pin} />
+                        <PinDetails id={id} pin={pin} user={userDetails} />
                         <Comment id={id} />
                     </div>
                 </div>

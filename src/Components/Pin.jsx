@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import { useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -7,12 +6,9 @@ import PinDetails from './PinDetails';
 import Comment from './Comment';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { IoMdShare } from 'react-icons/io';
-// import { fakePins } from '../utils'
 import Masonry from 'react-masonry-css';
 import Post from './Post';
 import { useData } from '../Context/DataProvider';
-// import Img from '../../public/img4.jpg'
-
 function Pin() {
     const { id } = useParams()
     const [pin, setPin] = useState(null)

@@ -7,27 +7,28 @@ import Post from '../Components/Post'
 import { useData } from '../Context/DataProvider';
 import EditAvatar from '../Components/EditAvatar';
 import Masonry from 'react-masonry-css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Banner from '../../public/img6.jpg'
 import FollowersModal from '../Components/FollowersModal';
 
 function Profile() {
+
+  const {id}  = useParams()
   const { user, users, fakePins } = useData()
   const [createdPosts, setCreatedPost] = useState([])
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   const [isFollowerOpen, setIsFollowerOpen] = useState(false)
   const [pins, setPins] = useState([])
 
-  useEffect(() => {
-    const pinsData = fakePins.filter((data) => {
-      // const userData = users.find((d) => d?.userId === data?.createdBy)
-      if(data?.createdBy === user?.userId){
-        return {...data }
-      }
-    })
-    setPins(pinsData)
-  }, [])
-
+  // useEffect(() => {
+  //   const pinsData = fakePins.filter((data) => {
+  //     // const userData = users.find((d) => d?.userId === data?.createdBy)
+  //     if(data?.createdBy === user?.userId){
+  //       return {...data }
+  //     }
+  //   })
+  //   setPins(pinsData)
+  // }, [])
 
   // useEffect(() => {
   //   // fetch data from firestore database

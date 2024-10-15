@@ -30,24 +30,32 @@ function Profile() {
   //   setPins(pinsData)
   // }, [])
 
-  // useEffect(() => {
-  //   // fetch data from firestore database
-  //   if (user) { 
-  //     const notesQuery = query(
-  //       collection(db,`posts`), where("createdBy", "==", user.email), 
-  //       orderBy("timestamp", "desc"));
-  //     const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
-  //       const notesData = snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data()
-  //       }));
-  //       setCreatedPost(notesData);
-  //     });
-  //     return () => unsubscribe();
-  //   }
-  // }, [user]);
-
-  console.log(pins);
+  useEffect(() => {
+    // fetch data from firestore database
+    if (user?.userId) { 
+      console.log('Fetching posts for userId:', user?.userId);  // Log the correct userId
+     
+      const notesQuery = query(
+        collection(db, 'posts'), 
+        where('createdBy', '==', user.userId), 
+        orderBy('createdAt', 'desc')
+      );
+      
+      const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
+        const notesData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCreatedPost(notesData);
+      });
+      
+      return () => unsubscribe();
+    }
+    console.log(createdPosts);
+    
+  }, [user]);
+  
+  
   const breakpointColumnsObj = {
     default: 5,
     1100: 3,
@@ -88,7 +96,7 @@ function Profile() {
             columnClassName="my-masonry-grid_column"
           >
             {pins?.map((data, index) => (
-              <Post key={index} data={data} showUserDetails={false} />
+              <Post key={index} data={createdPosts} showUserDetails={false} />
             ))
             }
           </Masonry>

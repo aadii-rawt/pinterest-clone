@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 function Post({ data ,showUserDetails}) {
-console.log(data);
 
   return (
     <Link to={`/pin/${data?.id}`} className='inline-block mb-3'>

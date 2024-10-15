@@ -65,7 +65,7 @@ function Header() {
             <span className=' cursor-pointer' onClick={handleSingOut}><BiBell size={30} /></span>
             <Link to="profile" className=' cursor-pointer'>
               {user?.avatar ?
-                <img src={`/${user?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
+                <img src={user?.avatar} alt="" className='w-8 h-8 rounded-full' />
                 :
                 <div className='w-8 h-8 rounded-full bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
               }

@@ -63,9 +63,6 @@ function Pin() {
         500: 2
     };
 
-    // const downloadImage = (url) => {
-    //     saveAs(url, 'downloaded-image.jpg'); // Filename for the downloaded image
-    // };
 
     function downloadImage(url) {
         fetch(url)
@@ -77,6 +74,11 @@ function Pin() {
             .catch(error => {
                 console.error('Error downloading image:', error);
             });
+    }
+
+    function copyLink(){
+        const currentUrl = window.location.href; 
+        navigator.clipboard.writeText(currentUrl)
     }
 
     return (
@@ -95,11 +97,11 @@ function Pin() {
                                         <div className='absolute bg-gray-100 shadow-lg rounded-md w-80 h-40 px-3 py-5 space-y-4 top-12 left-0'>
                                             <h1 className='text-center font-medium'>Share</h1>
                                             <div className='flex items-center justify-between px-3  gap-5 text-xs font-medium'>
-                                                <div className='w-10 h-10 text-center flex flex-col items-center'>
+                                                <div className='w-10 h-10 text-center flex flex-col items-center' onClick={copyLink}>
                                                     <button className='bg-gray-200 rounded-full hover:bg-gray-300/70'>
                                                         <img src="/link.png" alt=""  />
                                                     </button>
-                                                    <p>Whatsapp</p>
+                                                    <p className='text-nowrap'>Copy link</p>
                                                 </div>
                                                 <div className='w-10 h-10 text-center flex flex-col items-center'>
                                                     <a href={`https://api.whatsapp.com/send?text=${pin?.title} - https://pinterest-ar.netlify.app/pin/${id}`} target="_blank" rel="noreferrer">

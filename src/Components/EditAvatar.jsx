@@ -45,12 +45,6 @@ function EditAvatar({ setIsEditAvatarOpen }) {
         }
     }
 
-    function changePhoto(e) {
-        const filePath = e.target.files[0]
-        console.log(URL.createObjectURL(filePath));
-        setNewAvatar(URL.createObjectURL(filePath))
-    }
-
     async function uploadNewAvatar() {
         if (!newAvatar) return; // Ensure there's a file to upload
 
@@ -79,15 +73,22 @@ function EditAvatar({ setIsEditAvatarOpen }) {
         }
     }
 
-    function removeAvatar(){
-        setUser((prev) => ({...prev,avatar: ""}))
-        setIsEditAvatarOpen(false)    
+    async function removeAvatar() {
+        try {
+            const userDocRef = doc(db, 'users', user?.userId);
+            await updateDoc(userDocRef, { avatar: "" });
+            setUser((prev) => ({ ...prev, avatar: "" }));
+            setIsEditAvatarOpen(false);
+        } catch (error) {
+            console.error('Error removing avatar:', error);
+        }
     }
+
     return (
         <div className='w-full  max-h-screen min-h-screen bg-black/60 fixed inset-0 z-50 flex items-center justify-center  cursor-zoom-in' onClick={() => setIsEditAvatarOpen(false)}>
             {!newAvatar ?
                 <div className='w-1/2 p-10 bg-white rounded-lg cursor-default' onClick={(e) => e.stopPropagation()}>
-                    <h1 className='text-center  text-2xl font-semibold'>Change your picture</h1>
+                    <h1 className='text-center  text-2xl font-semibold'>Change your avatar</h1>
                     <div className='flex items-center justify-around my-10'>
                         <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={openCamera}>
                             Take Photo</button>
@@ -103,7 +104,7 @@ function EditAvatar({ setIsEditAvatarOpen }) {
                 :
                 <div className='w-1/2 min-h-[50%] max-h-[50%] cursor-default rounded-2xl bg-white p-2  overflow-hidden flex flex-col items-center justify-center'>
                     <div className=' flex items-center justify-center rounded-full overflow-hidden'>
-                        <img src={URL.createObjectURL(newAvatar)} alt="" className='w-1/3 h-1/3 rounded-full' />
+                        <img src={URL.createObjectURL(newAvatar)} alt="" className='w-[150px] h-[150px] rounded-full' />
                     </div>
                     <div className='flex items-center justify-around w-full my-10'>
                         <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium'>Cancel</button>

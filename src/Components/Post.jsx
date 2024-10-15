@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 function Post({ data ,showUserDetails}) {
+console.log(data);
 
   return (
     <Link to={`/pin/${data?.id}`} className='inline-block mb-3'>
@@ -12,8 +13,8 @@ function Post({ data ,showUserDetails}) {
       </div>
       {showUserDetails &&
       <div className='flex gap-2 items-center font-semibold text-sm '>
-        {data?.avatar ? 
-        <img src={`/${data?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
+        {data?.user?.avatar ? 
+        <img src={data?.user?.avatar} alt="" className='w-8 h-8 rounded-full' />
         : 
         <div className='w-8 h-8 rounded-full capitalize bg-red-400 flex items-center justify-center text-white'>{data?.user?.username[0]}</div>
         }

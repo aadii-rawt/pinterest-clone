@@ -14,6 +14,7 @@ function CreatePost() {
     link: '',
     tags: '',
   });
+  
   const [img, setImg] = useState();
 
   // Handle form data

@@ -8,152 +8,99 @@ import { useData } from '../Context/DataProvider';
 import EditAvatar from '../Components/EditAvatar';
 import Masonry from 'react-masonry-css';
 import { Link, useParams } from 'react-router-dom';
-import Banner from '../../public/img6.jpg'
 import FollowersModal from '../Components/FollowersModal';
 
 function UserProfile() {
-    const  {id}  = useParams();
-    // const { user, users, fakePins } = useData();
-    const [user,setUser] = useState({})
-    console.log(id);
-    
+    const { id } = useParams();
+    const [user, setUser] = useState({})
     const [createdPosts, setCreatedPost] = useState([]);
     const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false);
     const [isFollowerOpen, setIsFollowerOpen] = useState(false);
     const [pins, setPins] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null); 
 
     useEffect(() => {
         const fetchUser = async () => {
-        //   setLoading(true);
-          try {
-            const cleanId = id.replace(/[{}]/g, '');
-            console.log(cleanId);
-            
-            // Firestore query to fetch user whose username matches the param `id`
-            const q = query(collection(db, 'users'), where('username', '==', cleanId));
-            const querySnapshot = await getDocs(q);
-            if (!querySnapshot.empty) {
-              querySnapshot.forEach((doc) => {
-                setUser(doc.data()); // Set the matched user data
-              });
-            } else {
-              console.log('No user found with this username');
+            //   setLoading(true);
+            try {
+                const cleanId = id.replace(/[{}]/g, '');
+                console.log(cleanId);
+
+                // Firestore query to fetch user whose username matches the param `id`
+                const q = query(collection(db, 'users'), where('username', '==', cleanId));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    querySnapshot.forEach((doc) => {
+                        setUser(doc.data()); // Set the matched user data
+                    });
+                } else {
+                    console.log('No user found with this username');
+                }
+            } catch (error) {
+                console.error('Error fetching user: ', error);
+            } finally {
+                // setLoading(false);
             }
-          } catch (error) {
-            console.error('Error fetching user: ', error);
-          } finally {
-            // setLoading(false);
-          }
         };
-    
+
         if (id) {
-          fetchUser();
+            fetchUser();
         }
 
-        console.log(user);
-        
-      }, [id]);
+    }, [id]);
 
-  useEffect(() => {
-    if (currentUser) {
-      const notesQuery = query(
-        collection(db, 'posts'),
-        where('createdBy', '==', currentUser.email),
-        orderBy('timestamp', 'desc')
-      );
-      const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
-        const notesData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setCreatedPost(notesData);
-      });
-      return () => unsubscribe();
-    }
-  }, [currentUser]);
+    const breakpointColumnsObj = {
+        default: 5,
+        1100: 3,
+        700: 2,
+        500: 2
+    };
 
-  // useEffect(() => {
-  //   const pinsData = fakePins.filter((data) => {
-  //     // const userData = users.find((d) => d?.userId === data?.createdBy)
-  //     if(data?.createdBy === user?.userId){
-  //       return {...data }
-  //     }
-  //   })
-  //   setPins(pinsData)
-  // }, [])
+    return (
+        <div className='py-5 relative'>
+            <div className='profile flex justify-center items-center flex-col ' >
+                <div className='w-[500px] h-[300px] max-w[500px] max-h[300px] border-2 rounded-xl bg-cover bg-center' style={{backgroundImage: `url('/img6.jpg')`,}}>
+                </div>
+                <div className='-mt-10'>
+                {user?.avatar ?
+                    <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full border-2' onClick={() => setIsEditAvatarOpen(true)}>
+                        <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
+                    </div>
+                    :
+                    <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full border-2' onClick={() => setIsEditAvatarOpen(true)}>
+                        <h1 className='text-4xl font-semibold capitalize'>{user?.username?.[0]}</h1>
+                    </div>
+                }
+                </div>
+                {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
+                <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
+                <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.following?.length} 5 Following</h1>
+            </div>
 
-  // useEffect(() => {
-  //   // fetch data from firestore database
-  //   if (user) { 
-  //     const notesQuery = query(
-  //       collection(db,`posts`), where("createdBy", "==", user.email), 
-  //       orderBy("timestamp", "desc"));
-  //     const unsubscribe = onSnapshot(notesQuery, (snapshot) => {
-  //       const notesData = snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data()
-  //       }));
-  //       setCreatedPost(notesData);
-  //     });
-  //     return () => unsubscribe();
-  //   }
-  // }, [user]);
+            <div className='my-5'>
+                <div className='flex items-center justify-center text-base font-semibold gap-4 my-5'>
+                    <button className=' border-b-4 border-black py-2'>Created</button>
+                    <button>Saved</button>
+                </div>
+                <div>
+                    <Masonry
+                        breakpointCols={breakpointColumnsObj}
+                        className="my-masonry-grid"
+                        columnClassName="my-masonry-grid_column"
+                    >
+                        {pins?.map((data, index) => (
+                            <Post key={index} data={data} showUserDetails={false} />
+                        ))
+                        }
+                    </Masonry>
+                </div>
 
-  console.log(pins);
-  const breakpointColumnsObj = {
-    default: 5,
-    1100: 3,
-    700: 2,
-    500: 2
-  };
+            </div>
 
-  return (
-    <div className='py-5 relative'>
-      <div className='profile flex justify-center items-center flex-col ' >
-        <div className=' border-2 rounded-xl' style={{"backgroundImage": `url('/img6.jpg')`}}>
-     {/* <img src="" style={{backgroundImage: "url('/img5.jpg')"}} alt="" /> */}
+            {isFollowerOpen && <FollowersModal setIsFollowerOpen={setIsFollowerOpen} />}
+            {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} />}
+
         </div>
-        
-        {user?.avatar ?
-          <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full' onClick={() => setIsEditAvatarOpen(true)}>
-            <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
-          </div>
-          :
-          <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full' onClick={() => setIsEditAvatarOpen(true)}>
-            <h1 className='text-4xl font-semibold capitalize'>{user?.username?.[0]}</h1>
-          </div>
-        }
-        {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
-        <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
-        <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.following?.length} 5 Following</h1>
-      </div>
-
-      <div className='my-5'>
-        <div className='flex items-center justify-center text-base font-semibold gap-4 my-5'>
-          <button className=' border-b-4 border-black py-2'>Created</button>
-          <button>Saved</button>
-        </div>
-        <div>
-          <Masonry
-            breakpointCols={breakpointColumnsObj}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            {pins?.map((data, index) => (
-              <Post key={index} data={data} showUserDetails={false} />
-            ))
-            }
-          </Masonry>
-        </div>
-
-      </div>
-
-      {isFollowerOpen && <FollowersModal setIsFollowerOpen={setIsFollowerOpen} />}
-      {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} />}
-
-    </div>
-  )
+    )
 }
 
 export default UserProfile

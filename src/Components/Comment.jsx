@@ -11,44 +11,38 @@ function Comment({ id }) {
   const { user, setShowLoginModel, commentsData, setCommentsData } = useData()
 
   const [newComment, setNewComment] = useState("");
-  // const [user] = useAuthState(auth)
-  // console.log("bew");
 
   // // add new comment
-  function handleCommentSubmit() {
-    // if (!user) {
-    //   return setShowLoginModel(true)
-    // }
-    console.log("commnet");
-
-    userComment = {
-      id: "59875",
-      cmnt: newComment,
-      commentBy: user?.userId,
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!user) {
+      return setShowLoginModel(true); // Show login modal if user isn't authenticated
     }
 
-    setCommentsData((prev) => ([...prev,
-    {
-      pinId: id,
-      comments: [
-        userComment
-      ]
+    if (!newComment.trim()) return; // Prevent empty comment submission
+
+    try {
+      // Reference to the pin's comments collection (pin ID as collection name)
+      const commentsRef = collection(db, "comments", id, "userComments");
+
+      // Add the new comment to Firestore
+      await addDoc(commentsRef, {
+        id: `${new Date().getTime()}`, // Generate a unique ID for the comment (using timestamp)
+        cmnt: newComment,
+        commentBy: user?.userId, // User's ID who made the comment
+        createdAt: serverTimestamp(), // Timestamp for the comment
+      });
+
+      // Clear the input after submission
+      setNewComment("");
+
+    } catch (error) {
+      console.error("Error adding comment: ", error);
     }
-    ]))
+  };
 
-    setNewComment("")
-    console.log(commentsData);
-
-
-    // if (newComment.trim() && user) {
-    //   await addDoc(collection(db, "posts", id, "comments"), {
-    //     username: user?.displayName,
-    //     commentText: newComment,
-    //     createdAt: serverTimestamp()
-    //   });
-    //   setNewComment(""); // clear comment input
-    // }
-  }
+   
   return (
     <div className='flex items-center justify-between gap-2'>
       {user && <div className='flex items-center justify-center'>

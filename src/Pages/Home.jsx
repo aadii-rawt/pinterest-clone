@@ -14,16 +14,6 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
 
-  // useEffect(()=>{
-  //   const pinsData = fakePins.map((data) => {
-  //     const userData = users.find((d) => d?.userId === data?.createdBy)
-
-  //     return {...userData, ...data} 
-  //   })
-  //   setPins(pinsData)
-  // },[])
-
-
   useEffect(() => {
     const fetchPosts = async () => {
       const postsCollection = collection(db, "posts"); // Replace 'posts' with your collection name
@@ -49,14 +39,11 @@ function Home() {
         setPins(postList);
         setLoading(false)
       } catch (error) {
-        console.log("this is error", error);
-        
+        console.log("this is error", error); 
       }
     };
 
     console.log(pins);
-
-
     fetchPosts();
   }, []);
 
@@ -68,9 +55,9 @@ function Home() {
     500: 2
   };
 
-  // if (loading) {
-  //   return <Shimmer />
-  // }
+  if (loading) {
+    return <Shimmer />
+  }
 
 
   return (

@@ -9,6 +9,7 @@ import { IoMdShare } from 'react-icons/io';
 import Masonry from 'react-masonry-css';
 import Post from './Post';
 import { useData } from '../Context/DataProvider';
+import { saveAs } from 'file-saver';
 function Pin() {
     const { id } = useParams()
     const [pin, setPin] = useState(null)
@@ -61,6 +62,9 @@ function Pin() {
         500: 2
     };
 
+    const downloadImage = (url) => {
+        saveAs(url, 'downloaded-image.jpg'); // Filename for the downloaded image
+      };
 
     return (
         <div>
@@ -73,7 +77,7 @@ function Pin() {
                         <div className='flex justify-between items-center'>
                             <div className='flex gap-3 justify-around'>
                                 <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2'><IoMdShare size={22} color='black' /></div>
-                                <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2'><MdOutlineFileDownload size={28} color='black' /></div>
+                                <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2' onClick={() => downloadImage(pin?.img)}><MdOutlineFileDownload size={28} color='black' /></div>
                             </div>
                             <div><button className='btn bg-redTheme text-white md:px-3 md:py-1.5'>Save</button></div>
                         </div>

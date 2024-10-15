@@ -1,12 +1,17 @@
 import React, { useRef, useState } from 'react'
 import { useData } from '../Context/DataProvider';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function EditAvatar({ setIsEditAvatarOpen }) {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [photoCaptured, setPhotoCaptured] = useState(false);
-    const [newAvatar, setNewAvatar] = useState("")
-    const {user,setUser} = useData()
+    const [newAvatar, setNewAvatar] = useState()
+    const {user,setUser} = useData();
+
+
 
 
     async function openCamera() {
@@ -43,14 +48,37 @@ function EditAvatar({ setIsEditAvatarOpen }) {
     function changePhoto(e) {
         const filePath = e.target.files[0]
         console.log(URL.createObjectURL(filePath));
-
         setNewAvatar(URL.createObjectURL(filePath))
     }
 
-    function uploadnewAvatar(){
-        setUser((prev) => ({...prev,avatar: newAvatar}))
-        setIsEditAvatarOpen(false)    
+    async function uploadNewAvatar() {
+        if (!newAvatar) return; // Ensure there's a file to upload
+
+        const storage = getStorage(); // Get Firebase Storage instance
+        const avatarRef = ref(storage, `avatars/${user?.userId}/${newAvatar?.name}`); // Create a reference for the avatar file
+
+        try {
+            // Upload the file to Firebase Storage
+            await uploadBytes(avatarRef, newAvatar);
+
+            // Get the download URL of the uploaded file
+            const downloadURL = await getDownloadURL(avatarRef);
+
+            // Update the avatar URL in Firestore
+            const userDocRef = doc(db, 'users', user?.userId);
+            await updateDoc(userDocRef, { avatar: downloadURL });
+
+            // Update the user state with the new avatar URL
+            setUser((prev) => ({ ...prev, avatar: downloadURL }));
+
+            // Close the modal
+            setIsEditAvatarOpen(false);
+        } catch (error) {
+            console.error('Error uploading avatar:', error);
+            alert('Failed to upload avatar. Please try again.');
+        }
     }
+
     function removeAvatar(){
         setUser((prev) => ({...prev,avatar: ""}))
         setIsEditAvatarOpen(false)    
@@ -64,7 +92,7 @@ function EditAvatar({ setIsEditAvatarOpen }) {
                         <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={openCamera}>
                             Take Photo</button>
                         <div className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium'> <span className='cursor-pointer'>Choose Photo </span>
-                            <input type="file" accept='image/*' onChange={(e) => changePhoto(e)} className='w-full -z-0 absolute opacity-0 cursor-pointer inset-0' />
+                            <input type="file" accept='image/*'  onChange={(e) => setNewAvatar(e.target.files[0])} className='w-full -z-0 absolute opacity-0 cursor-pointer inset-0' />
                         </div>
                         <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium' onClick={removeAvatar}>Remove Photo</button>
 
@@ -75,11 +103,11 @@ function EditAvatar({ setIsEditAvatarOpen }) {
                 :
                 <div className='w-1/2 min-h-[50%] max-h-[50%] cursor-default rounded-2xl bg-white p-2  overflow-hidden flex flex-col items-center justify-center'>
                     <div className=' flex items-center justify-center rounded-full overflow-hidden'>
-                        <img src={newAvatar} alt="" className='w-1/3 h-1/3 rounded-full' />
+                        <img src={URL.createObjectURL(newAvatar)} alt="" className='w-1/3 h-1/3 rounded-full' />
                     </div>
                     <div className='flex items-center justify-around w-full my-10'>
                         <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium'>Cancel</button>
-                        <button className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={uploadnewAvatar}>Upload</button>
+                        <button className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={uploadNewAvatar}>Upload</button>
                     </div>
                 </div>
             }

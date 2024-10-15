@@ -21,7 +21,7 @@ function PinDetails({ id, pin,user }) {
             <div className='flex justify-between items-center'>
                 <Link to={`/user/{${user?.username}}`} className='flex items-center gap-2'>
                     {user?.avatar ?
-                        <img src={`/${user?.avatar}`} alt="" className='w-8 h-8 rounded-full' />
+                        <img src={user?.avatar} alt="" className='w-8 h-8 rounded-full' />
                         :
                         <div className='w-8 h-8 rounded-full capitalize bg-red-400 flex items-center justify-center text-white'>{user?.username?.[0]}</div>
                     }

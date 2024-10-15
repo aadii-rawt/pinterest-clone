@@ -16,17 +16,18 @@ function Pin() {
     const [userDetails, setUserDetails] = useState({})
     const [morePins, setMorePins] = useState([])
     const { users, fakePins } = useData()
+    const [openShareModal, setOpenShareModal] = useState(false)
     useEffect(() => {
         const fetchPin = async () => {
             try {
                 const postDocRef = doc(db, 'posts', id);
                 const postDoc = await getDoc(postDocRef);
-        
+
                 if (postDoc.exists()) {
                     const postData = postDoc.data();
                     setPin(postData);
                     const userDocRef = doc(db, 'users', postData?.createdBy);
-                    const userDoc = await getDoc(userDocRef);     
+                    const userDoc = await getDoc(userDocRef);
                     if (userDoc.exists()) {
                         setUserDetails(userDoc.data());
                         console.log('User details:', userDoc.data());
@@ -62,9 +63,21 @@ function Pin() {
         500: 2
     };
 
-    const downloadImage = (url) => {
-        saveAs(url, 'downloaded-image.jpg'); // Filename for the downloaded image
-      };
+    // const downloadImage = (url) => {
+    //     saveAs(url, 'downloaded-image.jpg'); // Filename for the downloaded image
+    // };
+
+    function downloadImage(url) {
+        fetch(url)
+            .then(response => response.blob()) // Convert the image to a blob
+            .then(blob => {
+                const fileName = pin?.title || 'download'; // Use the pin title or a default name
+                saveAs(blob, `${fileName}.jpg`); // Save the image as a file
+            })
+            .catch(error => {
+                console.error('Error downloading image:', error);
+            });
+    }
 
     return (
         <div>
@@ -76,7 +89,40 @@ function Pin() {
                     <div className='w-full lg:w-1/2 h-full px-3 py-5 relative'>
                         <div className='flex justify-between items-center'>
                             <div className='flex gap-3 justify-around'>
-                                <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2'><IoMdShare size={22} color='black' /></div>
+                                <div className={`cursor-pointer relative rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2 ${openShareModal && "bg-black hover:bg-black"}`}>
+                                    <IoMdShare size={22} color={openShareModal ? "white" : "black"} onClick={() => setOpenShareModal(!openShareModal)} />
+                                    {openShareModal &&
+                                        <div className='absolute bg-gray-100 shadow-lg rounded-md w-80 h-40 px-3 py-5 space-y-4 top-12 left-0'>
+                                            <h1 className='text-center font-medium'>Share</h1>
+                                            <div className='flex items-center justify-between px-3  gap-5 text-xs font-medium'>
+                                                <div className='w-10 h-10 text-center flex flex-col items-center'>
+                                                    <button className='bg-gray-200 rounded-full hover:bg-gray-300/70'>
+                                                        <img src="/link.png" alt=""  />
+                                                    </button>
+                                                    <p>Whatsapp</p>
+                                                </div>
+                                                <div className='w-10 h-10 text-center flex flex-col items-center'>
+                                                    <a href={`https://api.whatsapp.com/send?text=${pin?.title} - https://pinterest-ar.netlify.app/pin/${id}`} target="_blank" rel="noreferrer">
+                                                        <img src="/whatsapp.png" alt="" />
+                                                    </a>
+                                                    <p>Whatsapp</p>
+                                                </div>
+                                                <div className='w-10 h-10 text-center flex flex-col items-center'>
+                                                    <a href={`https://www.facebook.com/sharer/sharer.php?u=https://pinterest-ar.netlify.app/pin/${id}`} target="_blank" rel="noreferrer">
+                                                        <img src="/facebook.png" alt="" />
+                                                    </a>
+                                                    <p>Facebook</p>
+                                                </div>
+                                                <div className='w-10 h-10 text-center flex flex-col items-center'>
+                                                    <a href={`https://twitter.com/intent/tweet?url=https://pinterest-ar.netlify.app/pin/${id}&text=${pin?.title}`} target="_blank" rel="noreferrer">
+                                                        <img src="/twitter.png" alt="" />
+                                                    </a>
+                                                    <p>X</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
                                 <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2' onClick={() => downloadImage(pin?.img)}><MdOutlineFileDownload size={28} color='black' /></div>
                             </div>
                             <div><button className='btn bg-redTheme text-white md:px-3 md:py-1.5'>Save</button></div>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-function Post({ data ,showUserDetails}) {
-
+function Post({ data ,showUserDetails}) {  
   return (
     <Link to={`/pin/${data?.id}`} className='inline-block mb-3'>
       <div className='post relative rounded-xl cursor-pointer overflow-hidden group mb-4'>

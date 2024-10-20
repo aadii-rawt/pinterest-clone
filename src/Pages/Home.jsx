@@ -42,8 +42,6 @@ function Home() {
         console.log("this is error", error); 
       }
     };
-
-    console.log(pins);
     fetchPosts();
   }, []);
 

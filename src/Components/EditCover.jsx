@@ -4,16 +4,13 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
-function EditAvatar({ setIsEditAvatarOpen }) {
+function EditCover({ setIsEditCoverOpen }) {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [photoCaptured, setPhotoCaptured] = useState(false);
-    const [newAvatar, setNewAvatar] = useState()
+    const [newCover, setNewCover] = useState()
     const {user,setUser} = useData();
 
-
-
-console.log("Avatar");
 
     async function openCamera() {
         try {
@@ -46,28 +43,28 @@ console.log("Avatar");
         }
     }
 
-    async function uploadNewAvatar() {
-        if (!newAvatar) return; // Ensure there's a file to upload
+    async function uploadNewCover() {
+        if (!newCover) return; // Ensure there's a file to upload
 
         const storage = getStorage(); // Get Firebase Storage instance
-        const avatarRef = ref(storage, `avatars/${user?.userId}/${newAvatar?.name}`); // Create a reference for the avatar file
+        const avatarRef = ref(storage, `covers/${user?.userId}/${newCover?.name}`); // Create a reference for the avatar file
 
         try {
             // Upload the file to Firebase Storage
-            await uploadBytes(avatarRef, newAvatar);
+            await uploadBytes(avatarRef, newCover);
 
             // Get the download URL of the uploaded file
             const downloadURL = await getDownloadURL(avatarRef);
 
             // Update the avatar URL in Firestore
             const userDocRef = doc(db, 'users', user?.userId);
-            await updateDoc(userDocRef, { avatar: downloadURL });
+            await updateDoc(userDocRef, { cover: downloadURL });
 
             // Update the user state with the new avatar URL
-            setUser((prev) => ({ ...prev, avatar: downloadURL }));
+            setUser((prev) => ({ ...prev, cover: downloadURL }));
 
             // Close the modal
-            setIsEditAvatarOpen(false);
+            setIsEditCoverOpen(false);
         } catch (error) {
             console.error('Error uploading avatar:', error);
             alert('Failed to upload avatar. Please try again.');
@@ -77,24 +74,24 @@ console.log("Avatar");
     async function removeAvatar() {
         try {
             const userDocRef = doc(db, 'users', user?.userId);
-            await updateDoc(userDocRef, { avatar: "" });
-            setUser((prev) => ({ ...prev, avatar: "" }));
-            setIsEditAvatarOpen(false);
+            await updateDoc(userDocRef, { cover: "" });
+            setUser((prev) => ({ ...prev, cover: "" }));
+            setIsEditCoverOpen(false);
         } catch (error) {
             console.error('Error removing avatar:', error);
         }
     }
 
     return (
-        <div className='w-full  max-h-screen min-h-screen bg-black/60 fixed inset-0 z-50 flex items-center justify-center  cursor-zoom-in' onClick={() => setIsEditAvatarOpen(false)}>
-            {!newAvatar ?
+        <div className='w-full  max-h-screen min-h-screen bg-black/60 fixed inset-0 z-50 flex items-center justify-center  cursor-zoom-in' onClick={() => setIsEditCoverOpen(false)}>
+            {!newCover ?
                 <div className='w-1/2 p-10 bg-white rounded-lg cursor-default' onClick={(e) => e.stopPropagation()}>
-                    <h1 className='text-center  text-2xl font-semibold'>Change your avatar</h1>
+                    <h1 className='text-center  text-2xl font-semibold'>Change your Cover</h1>
                     <div className='flex items-center justify-around my-10'>
                         <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={openCamera}>
                             Take Photo</button>
                         <div className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium'> <span className='cursor-pointer'>Choose Photo </span>
-                            <input type="file" accept='image/*'  onChange={(e) => setNewAvatar(e.target.files[0])} className='w-full -z-0 absolute opacity-0 cursor-pointer inset-0' />
+                            <input type="file" accept='image/*'  onChange={(e) => setNewCover(e.target.files[0])} className='w-full -z-0 absolute opacity-0 cursor-pointer inset-0' />
                         </div>
                         <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium' onClick={removeAvatar}>Remove Photo</button>
 
@@ -105,11 +102,11 @@ console.log("Avatar");
                 :
                 <div className='w-1/2 min-h-[50%] max-h-[50%] cursor-default rounded-2xl bg-white p-2  overflow-hidden flex flex-col items-center justify-center'>
                     <div className=' flex items-center justify-center rounded-full overflow-hidden'>
-                        <img src={URL.createObjectURL(newAvatar)} alt="" className='w-[150px] h-[150px] rounded-full' />
+                        <img src={URL.createObjectURL(newCover)} alt="" className='w-[150px] h-[150px] rounded-full' />
                     </div>
                     <div className='flex items-center justify-around w-full my-10'>
                         <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium'>Cancel</button>
-                        <button className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={uploadNewAvatar}>Upload</button>
+                        <button className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={uploadNewCover}>Upload</button>
                     </div>
                 </div>
             }
@@ -118,4 +115,4 @@ console.log("Avatar");
     )
 }
 
-export default EditAvatar
+export default EditCover

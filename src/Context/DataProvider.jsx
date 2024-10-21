@@ -111,58 +111,7 @@ export default function DataProvider({ children }) {
             description: "",
         },
     ])
-    const [commentsData, setCommentsData] = useState([
-        {
-            pinId: "uiu5oi34jj5lkj",
-            comments: [
-                {
-                    id: "345954",
-                    cmnt: "Cool 🔥",
-                    commentBy: 3
-                },
-                {
-                    id: "345954",
-                    cmnt: "♥️♥️",
-                    commentBy: 4
-                },
-                {
-                    id: "345954",
-                    cmnt: "👋👋",
-                    commentBy: 3
-                },
-                {
-                    id: "345954",
-                    cmnt: "this is nice",
-                    commentBy: 3
-                },
-                {
-                    id: "345954",
-                    cmnt: "♥️♥️",
-                    commentBy: 3
-                },
-            ]
-        },
-        {
-            pinId: "dfjsdfj9euieuo",
-            comments: [
-                {
-                    id: "345954",
-                    cmnt: "📈📈📈",
-                    commentBy: 3
-                },
-                {
-                    id: "345954",
-                    cmnt: "🤬🤬",
-                    commentBy: 4
-                },
-                {
-                    id: "345954",
-                    cmnt: "🤡🤡",
-                    commentBy: 3
-                },
-            ]
-        },
-    ])
+    
     return <dataContext.Provider value={{
         user, setUser, showLoginModel, setShowLoginModel, users, setUsers, fakePins, setFakePins, commentsData, setCommentsData
     }}>

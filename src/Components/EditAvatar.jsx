@@ -3,17 +3,20 @@ import { useData } from '../Context/DataProvider';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { MdOutlineCameraAlt, MdOutlineDelete } from 'react-icons/md';
+import { FaRegImage } from 'react-icons/fa';
+import { RxCross2 } from 'react-icons/rx';
 
-function EditAvatar({ setIsEditAvatarOpen }) {
+function EditAvatar({ setIsEditAvatarOpen, username, imgUrl }) {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const [photoCaptured, setPhotoCaptured] = useState(false);
     const [newAvatar, setNewAvatar] = useState()
-    const {user,setUser} = useData();
+    const { user, setUser } = useData();
 
 
 
-console.log("Avatar");
+    console.log("Avatar");
 
     async function openCamera() {
         try {
@@ -88,17 +91,28 @@ console.log("Avatar");
     return (
         <div className='w-full  max-h-screen min-h-screen bg-black/60 fixed inset-0 z-50 flex items-center justify-center  cursor-zoom-in' onClick={() => setIsEditAvatarOpen(false)}>
             {!newAvatar ?
-                <div className='w-1/2 p-10 bg-white rounded-lg cursor-default' onClick={(e) => e.stopPropagation()}>
+                <div className='w-1/2 p-10 relative bg-white rounded-lg cursor-default' onClick={(e) => e.stopPropagation()}>
                     <h1 className='text-center  text-2xl font-semibold'>Change your avatar</h1>
+                    <div className='flex items-center justify-center my-5'>
+                        {imgUrl ?
+                            <img src={imgUrl} alt="" className='w-44 h-44 rounded-full' />
+                            :
+                            <div className='flex items-center justify-center bg-green-300 w-44 h-44 rounded-full '>
+                                <h1 className='text-6xl font-semibold capitalize'>{username?.[0]}</h1>
+                            </div>
+                        }
+                    </div>
                     <div className='flex items-center justify-around my-10'>
-                        <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium' onClick={openCamera}>
-                            Take Photo</button>
-                        <div className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium'> <span className='cursor-pointer'>Choose Photo </span>
-                            <input type="file" accept='image/*'  onChange={(e) => setNewAvatar(e.target.files[0])} className='w-full -z-0 absolute opacity-0 cursor-pointer inset-0' />
+                        <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium flex items-center gap-2' onClick={removeAvatar}><MdOutlineDelete size={24} /> Remove Photo</button>
+                        <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium flex items-center gap-2 justify-center' onClick={openCamera}>
+                            <MdOutlineCameraAlt /><span> Take Photo</span></button>
+                        <div className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium '> <span className='cursor-pointer flex items-center gap-2'><FaRegImage
+                        /> Choose Photo </span>
+                            <input type="file" accept='image/*' onChange={(e) => setNewAvatar(e.target.files[0])} className='w-full -z-0 absolute opacity-0 cursor-pointer inset-0' />
                         </div>
-                        <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium' onClick={removeAvatar}>Remove Photo</button>
 
                     </div>
+                    <button className='absolute right-5 top-5' onClick={() => setIsEditAvatarOpen(false)}><RxCross2 size={24} /></button>
 
                     {/* <canvas ref={canvasRef} style={{ width: '100%', maxWidth: '400px' }}></canvas> */}
                 </div>

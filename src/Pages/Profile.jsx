@@ -63,7 +63,7 @@ function Profile() {
           setIsEditAvatarOpen(true)
         }}>
           {user?.avatar ?
-            <div className='flex items-center justify-center bg-green-300 w-24 h-24 border-2 cursor-pointer rounded-full'>
+            <div className='flex items-center justify-center bg-green-300 w-24 h-fit max-h-24 border-2 cursor-pointer rounded-full'>
               <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
             </div>
             :
@@ -74,7 +74,7 @@ function Profile() {
         </div>
         {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
         <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
-        <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.following?.length} 5 Following</h1>
+        <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.follower?.length} Follower</h1>
       </div>
 
       <div className='my-5'>
@@ -98,8 +98,8 @@ function Profile() {
       </div>
 
       {isFollowerOpen && <FollowersModal setIsFollowerOpen={setIsFollowerOpen} />}
-      {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} />}
-      {isEditCoverOpen && <EditCover setIsEditCoverOpen={setIsEditCoverOpen} />}
+      {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} imgUrl={user?.avatar} username={user?.username} />}
+      {isEditCoverOpen && <EditCover setIsEditCoverOpen={setIsEditCoverOpen} imgUrl={user?.cover} />}
 
     </div>
   )

@@ -111,9 +111,15 @@ export default function DataProvider({ children }) {
             description: "",
         },
     ])
+    const breakpointColumnsObj = {
+        default: 5,
+        1100: 3,
+        700: 2,
+        500: 2
+      };
     
     return <dataContext.Provider value={{
-        user, setUser, showLoginModel, setShowLoginModel, users, setUsers, fakePins, setFakePins, commentsData, setCommentsData
+        user, setUser, showLoginModel, setShowLoginModel, users, setUsers, fakePins, setFakePins,breakpointColumnsObj
     }}>
         {children}
     </dataContext.Provider>

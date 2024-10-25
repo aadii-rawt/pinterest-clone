@@ -11,48 +11,24 @@ import { Link, useParams } from 'react-router-dom';
 import Banner from '../../public/img6.jpg'
 import FollowersModal from '../Components/FollowersModal';
 import EditCover from '../Components/EditCover';
+import CreatedPost from '../Components/CreatedPost';
+import SavedPost from '../Components/SavedPost';
 
 function Profile() {
 
   const { id } = useParams()
   const { user, users, fakePins } = useData()
-  const [createdPosts, setCreatedPost] = useState([])
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   const [isEditCoverOpen, setIsEditCoverOpen] = useState(false)
   const [isFollowerOpen, setIsFollowerOpen] = useState(false)
   const [pins, setPins] = useState([])
-
-  useEffect(() => {
-    if (user) {
-      const postsRef = collection(db, 'posts'); // Assuming 'posts' is your collection name
-      const q = query(postsRef, where('createdBy', '==', 'xD7BXJRJaGXwGP2fMdUws5t4EYY2')); // Filter posts by user ID
-
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const postsArray = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        // console.log(postsArray);
-
-        setCreatedPost(postsArray); // Update state with fetched posts
-      });
-
-      return () => unsubscribe(); // Clean up the subscription
-    }
-
-  }, [user]); // Dependency on the user to fetch their posts
-
-  const breakpointColumnsObj = {
-    default: 5,
-    1100: 3,
-    700: 2,
-    500: 2
-  };
+  const [isSavedSelected,setIsSavedSelected] = useState(true)
+  
 
   return (
     <div className='py-5 relative'>
       <div className='profile flex justify-center items-center flex-col ' >
-        <div className='w-[500px] h-[300px] max-w[700px] max-h[700px] border-2 rounded-xl bg-cover bg-center cursor-pointer' style={{
+        <div className='w-full h-[300px] max-w-[900px] max-h[700px] border-2 rounded-xl bg-cover bg-center cursor-pointer' style={{
           backgroundImage: user?.cover ? `url(${user.cover})` : "none",
           backgroundColor: user?.cover ? "transparent" : "rgb(229 231 235)",
         }}
@@ -79,21 +55,11 @@ function Profile() {
 
       <div className='my-5'>
         <div className='flex items-center justify-center text-base font-semibold gap-4 my-5'>
-          <button className=' border-b-4 border-black py-2'>Created</button>
-          <button>Saved</button>
+          <button className={`  ${isSavedSelected && "border-b-4 border-black py-2"}`} onClick={() => setIsSavedSelected(true)}>Created</button>
+          <button className={` ${!isSavedSelected && "border-b-4 border-black py-2"}`} onClick={() => setIsSavedSelected(false)}>Saved</button>
         </div>
-        <div>
-          <Masonry
-            breakpointCols={breakpointColumnsObj}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            {createdPosts?.map((data, index) => (
-              <Post key={index} data={data} showUserDetails={false} />
-            ))
-            }
-          </Masonry>
-        </div>
+        {user && isSavedSelected ? <CreatedPost userId={user?.userId} /> : <SavedPost  userId={user?.userId} /> }
+        
 
       </div>
 

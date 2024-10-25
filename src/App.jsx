@@ -8,6 +8,10 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import UserProfile from "./Pages/UserProfile";
 const Pin = lazy(() => import('./Components/Pin'))
 const Profile = lazy(() => import('./Pages/Profile'))
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from "./firebase";
+import { doc, getDoc } from "firebase/firestore";
+
 
 
 const router = createBrowserRouter([
@@ -41,12 +45,35 @@ const router = createBrowserRouter([
 
 
 function App() {
-  const { user } = useData()
-  useEffect(() => {
+  const { user ,setUser} = useData()
+  // useEffect(() => {
+  //   if (user) {
+  //     localStorage.setItem("userAuth", JSON.stringify(user))
+  //   }
+  // }, [user])
+
+
+// Inside your component
+useEffect(() => {
+
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
     if (user) {
-      localStorage.setItem("userAuth", JSON.stringify(user))
+      // Fetch user details from Firestore using the user's UID
+      getDoc(doc(db, "users", user.uid)).then((userDoc) => {
+        if (userDoc.exists()) {
+          setUser(userDoc.data());
+          console.log("User is still logged in.");
+        }
+      });
+    } else {
+      console.log("No user is logged in.");
     }
-  }, [user])
+  });
+
+  // Cleanup the listener on component unmount
+  return () => unsubscribe();
+}, []);
+
 
   return (
     <RouterProvider router={router} />

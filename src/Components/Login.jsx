@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { auth, db } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from 'firebase/auth';
 import { RxCross2 } from 'react-icons/rx';
 import { useData } from '../Context/DataProvider';
 // import { users } from '../utils';
@@ -9,15 +9,15 @@ import { json } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 
 function Login({ }) {
-  const {user,setUser,setShowLoginModel,users} = useData()
-  const [formData,setFormData] = useState({
+  const { user, setUser, setShowLoginModel, users } = useData()
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
-  const [error,setError] = useState("")
-  function handleData(e){
-    const {name,value} = e.target
-    setFormData((prev) => ({...prev,[name]:value}))
+  const [error, setError] = useState("")
+  function handleData(e) {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   // function handleLogin(e){
@@ -31,7 +31,7 @@ function Login({ }) {
   //         password: ""
   //       })
   //       console.log("login successfully");
-        
+
   //     }else{
   //       setError("Invalid email and password")
   //     }
@@ -43,21 +43,24 @@ function Login({ }) {
   async function handleLogin(e) {
     e.preventDefault();
     setError(""); // Clear previous errors
-  
+
     if (formData.email && formData.password) {
       try {
         // Authenticate user with email and password
+
+
+        await setPersistence(auth, browserLocalPersistence);
         const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        
+
         // Get the user ID from the authenticated user
         const uid = userCredential.user.uid;
-  
+
         // Fetch user details from Firestore using the uid
         const userDoc = await getDoc(doc(db, "users", uid));
         if (userDoc.exists()) {
           // Set the user state with fetched user data
           setUser(userDoc.data());
-  
+
           // Close login modal and reset form data
           setShowLoginModel(false);
           setFormData({
@@ -78,8 +81,8 @@ function Login({ }) {
       setError("Please enter both email and password.");
     }
   }
-  
-  
+
+
   // close login form
   const handleClose = (e) => {
     e.stopPropagation();
@@ -92,28 +95,28 @@ function Login({ }) {
       <div className="relative bg-white mx-5 py-8 px-8 rounded-lg shadow-lg  w-full md:w-3/5  lg:w-2/5"
         onClick={(e) => e.stopPropagation()} >
         <div className="flex justify-center mb-4">
-          <img src="https://via.placeholder.com/40" alt="Pinterest Logo" className="h-10" />
+          <img src="./logo.png" alt="Pinterest Logo" className="h-10" />
         </div>
         <h2 className="text-center text-2xl font-bold mb-6">Log in to see more</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block mb-1 text-gray-600" htmlFor="email">Email</label>
-            <input type="email" id="email" 
-            name='email'
-            value={formData?.email}
-            onChange={handleData}
-            className="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input type="email" id="email"
+              name='email'
+              value={formData?.email}
+              onChange={handleData}
+              className="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
           <div className="mb-4">
             <label className="block mb-1 text-gray-600" htmlFor="password">Password</label>
-            <input type="password" id="password" 
-            name='password'
-            value={formData?.password}
-            onChange={handleData}
-            className="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+            <input type="password" id="password"
+              name='password'
+              value={formData?.password}
+              onChange={handleData}
+              className="w-full p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
-          {error && 
-          <div><p className="text-red-700">{error}</p></div>
+          {error &&
+            <div><p className="text-red-700">{error}</p></div>
           }
           <div className="flex justify-between mb-6">
             <a href="#" className="text-blue-600 text-sm">Forgot your password?</a>

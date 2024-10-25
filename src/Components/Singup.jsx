@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
+import { browserLocalPersistence, createUserWithEmailAndPassword, setPersistence, signInWithPopup, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { auth, db } from '../firebase';
@@ -37,6 +37,8 @@ function Signup({ setShowSignupModal }) {
         if (formData.email && formData.password && formData.username) {
             try {
                 // Sign up user with email and password
+
+                await setPersistence(auth, browserLocalPersistence);
                 const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
     
                 // Update the user's profile with the username

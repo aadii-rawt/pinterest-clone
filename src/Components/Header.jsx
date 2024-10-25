@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Login from './Login'
 import Signup from './Singup'
 import { Link } from 'react-router-dom'
-import { BiBell, BiUserCircle } from 'react-icons/bi'
+import { BiBell, BiLogOut, BiUserCircle } from 'react-icons/bi'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../firebase'
 import { MdCancel } from 'react-icons/md'
@@ -16,6 +16,7 @@ function Header() {
   function handleSingOut() {
     auth.signOut()
   }
+
 
   return (
     <div className='sticky container bg-white inset-0 z-30  flex justify-between items-center py-3'>
@@ -70,6 +71,7 @@ function Header() {
                 <div className='w-8 h-8 rounded-full bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
               }
             </Link>
+            <BiLogOut  size={25} className='cursor-pointer' onClick={handleSingOut}/>
           </> :
           <> <button className='btn bg-grayTheme text-black' onClick={() => setShowLoginModel(true)}>Log in
             {showLoginModel && <Login />}
@@ -78,6 +80,7 @@ function Header() {
               {showSignupModal && <Signup setShowSignupModal={setShowSignupModal} />}
             </button></>}
       </div>
+
 
     </div >
   )

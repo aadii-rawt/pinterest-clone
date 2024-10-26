@@ -5,14 +5,16 @@ import { Link } from 'react-router-dom'
 import { BiBell, BiLogOut, BiUserCircle } from 'react-icons/bi'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../firebase'
-import { MdCancel } from 'react-icons/md'
+import { MdCancel, MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { useData } from '../Context/DataProvider'
+import { AiOutlineLogout } from 'react-icons/ai'
 
 function Header() {
   const [searchText, setSearchText] = useState("")
   const [showLinks, setShowLinks] = useState(false) // show links when user click  // show login model
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
-  const { user, showLoginModel, setShowLoginModel } = useData()
+  const { user, showLoginModel, setShowLoginModel } = useData();
+  const [viewProfileOpen, setViewProfileOpen] = useState(false)
   function handleSingOut() {
     auth.signOut()
   }
@@ -71,7 +73,27 @@ function Header() {
                 <div className='w-8 h-8 rounded-full bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
               }
             </Link>
-            <BiLogOut  size={25} className='cursor-pointer' onClick={handleSingOut}/>
+            <MdOutlineKeyboardArrowDown size={25} className='cursor-pointer text-gray-600 hover:text-black hover:bg-gray-200 rounded-full' onClick={() => setViewProfileOpen(!viewProfileOpen)}/>
+            {viewProfileOpen &&
+              <div className='absolute top-16 right-0 z-50 bg-gray-100 shadow-md text-black rounded-md p-2.5'>
+                <div className='flex items-start gap-2 hover:bg-gray-200 p-2 rounded-md'>
+                  <div>
+                    {user?.avatar ?
+                      <img src={user?.avatar} alt="" className='w-12 h-12 rounded-full' />
+                      :
+                      <div className='w-12 h-12 rounded-full bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
+                    }
+
+                  </div>
+                  <div>
+                    <h1 className='text-lg font-medium'>{user?.username}</h1>
+                    <h1 className='text-sm'>{user?.email}</h1>
+                  </div>
+                </div>
+                <div><Link to='/profile' className='w-full text-left hover:bg-gray-200 flex items-center gap-2 font-medium p-2 rounded-md'> View Profile</Link></div>
+                <div><button className='w-full text-left hover:bg-gray-200 flex items-center gap-2 font-medium p-2 rounded-md' onClick={handleSingOut}> Log Out</button></div>
+              </div>
+            }
           </> :
           <> <button className='btn bg-grayTheme text-black' onClick={() => setShowLoginModel(true)}>Log in
             {showLoginModel && <Login />}

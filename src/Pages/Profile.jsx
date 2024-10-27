@@ -8,7 +8,6 @@ import { useData } from '../Context/DataProvider';
 import EditAvatar from '../Components/EditAvatar';
 import Masonry from 'react-masonry-css';
 import { Link, useParams } from 'react-router-dom';
-import Banner from '../../public/img6.jpg'
 import FollowersModal from '../Components/FollowersModal';
 import EditCover from '../Components/EditCover';
 import CreatedPost from '../Components/CreatedPost';
@@ -21,9 +20,7 @@ function Profile() {
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   const [isEditCoverOpen, setIsEditCoverOpen] = useState(false)
   const [isFollowerOpen, setIsFollowerOpen] = useState(false)
-  const [pins, setPins] = useState([])
-  const [isSavedSelected,setIsSavedSelected] = useState(true)
-  
+  const [isSavedSelected, setIsSavedSelected] = useState(true)
 
   return (
     <div className='py-5 relative'>
@@ -48,21 +45,19 @@ function Profile() {
             </div>
           }
         </div>
-        {/* <div className='w-24 h-24 bg-grayTheme rounded-full'></div> */}
         <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
         <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.follower?.length} Follower</h1>
       </div>
 
       <div className='my-5'>
         <div className='flex items-center justify-center text-base font-semibold gap-4 my-5'>
-          <button className={`  ${isSavedSelected && "border-b-4 border-black py-2"}`} onClick={() => setIsSavedSelected(true)}>Created</button>
-          <button className={` ${!isSavedSelected && "border-b-4 border-black py-2"}`} onClick={() => setIsSavedSelected(false)}>Saved</button>
+          <button className={`  ${isSavedSelected && "border-b-4 border-red-600 py-2"}`} onClick={() => setIsSavedSelected(true)}>Created</button>
+          <button className={` ${!isSavedSelected && "border-b-4 border-red-600 py-2"}`} onClick={() => setIsSavedSelected(false)}>Saved</button>
         </div>
-        {user && isSavedSelected ? <CreatedPost userId={user?.userId} /> : <SavedPost  userId={user?.userId} /> }
-        
-
+        {/* ==================== user created post and Saved Post ===================================== */}
+        {user && isSavedSelected ? <CreatedPost userId={user?.userId} /> : <SavedPost userId={user?.userId} />}
       </div>
-
+      {/* ---------------------- modals ------------------------------------ */}
       {isFollowerOpen && <FollowersModal setIsFollowerOpen={setIsFollowerOpen} />}
       {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} imgUrl={user?.avatar} username={user?.username} />}
       {isEditCoverOpen && <EditCover setIsEditCoverOpen={setIsEditCoverOpen} imgUrl={user?.cover} />}

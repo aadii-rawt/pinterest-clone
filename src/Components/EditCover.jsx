@@ -65,7 +65,6 @@ function EditCover({ setIsEditCoverOpen,username, imgUrl }) {
 
             // Update the user state with the new avatar URL
             setUser((prev) => ({ ...prev, cover: downloadURL }));
-
             // Close the modal
             setIsEditCoverOpen(false);
         } catch (error) {
@@ -96,7 +95,8 @@ function EditCover({ setIsEditCoverOpen,username, imgUrl }) {
                        }
                     </div>
                     <div className='flex items-center justify-around my-10'>
-                        <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium flex items-center gap-2' onClick={removeAvatar}><MdOutlineDelete size={24} /> Remove Photo</button>
+                        {user?.cover && 
+                        <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium flex items-center gap-2' onClick={removeAvatar}><MdOutlineDelete size={24} /> Remove Photo</button>}
                         <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium flex items-center gap-2 justify-center' onClick={openCamera}>
                             <MdOutlineCameraAlt /><span> Take Photo</span></button>
                         <div className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium '> <span className='cursor-pointer flex items-center gap-2'><FaRegImage
@@ -118,7 +118,6 @@ function EditCover({ setIsEditCoverOpen,username, imgUrl }) {
                     </div>
                 </div>
             }
-
         </div>
     )
 }

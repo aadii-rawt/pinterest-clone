@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Login from './Login'
 import Signup from './Singup'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BiBell, BiLogOut, BiUserCircle } from 'react-icons/bi'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../firebase'
@@ -15,8 +15,11 @@ function Header() {
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
   const { user, showLoginModel, setShowLoginModel } = useData();
   const [viewProfileOpen, setViewProfileOpen] = useState(false)
+  const navigate = useNavigate()
   function handleSingOut() {
     auth.signOut()
+    navigate("/")
+    setViewProfileOpen(false)
   }
 
 
@@ -90,7 +93,7 @@ function Header() {
                     <h1 className='text-sm'>{user?.email}</h1>
                   </div>
                 </div>
-                <div><Link to='/profile' className='w-full text-left hover:bg-gray-200 flex items-center gap-2 font-medium p-2 rounded-md'> View Profile</Link></div>
+                <div><button onClick={() => {navigate("/profile"); setViewProfileOpen(false)}} className='w-full text-left hover:bg-gray-200 flex items-center gap-2 font-medium p-2 rounded-md'> View Profile</button></div>
                 <div><button className='w-full text-left hover:bg-gray-200 flex items-center gap-2 font-medium p-2 rounded-md' onClick={handleSingOut}> Log Out</button></div>
               </div>
             }

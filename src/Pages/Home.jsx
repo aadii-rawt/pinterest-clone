@@ -6,7 +6,7 @@ import { useData } from '../Context/DataProvider';
 import Post from '../Components/Post';
 // import { fakePins, users } from '../utils'
 import Masonry from 'react-masonry-css';
-import Shimmer from '../Components/Shimmer';
+import PinShimmer from '../Components/Shimmer/PinShimmer';
 function Home() {
   const [pins, setPins] = useState([])
   const { fakePins, users } = useData()
@@ -54,7 +54,7 @@ function Home() {
   };
 
   if (loading) {
-    return <Shimmer />
+    return <PinShimmer />
   }
 
 

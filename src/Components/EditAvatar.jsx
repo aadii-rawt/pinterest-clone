@@ -14,8 +14,6 @@ function EditAvatar({ setIsEditAvatarOpen, username, imgUrl }) {
     const [newAvatar, setNewAvatar] = useState()
     const { user, setUser } = useData();
 
-
-
     console.log("Avatar");
 
     async function openCamera() {
@@ -103,7 +101,8 @@ function EditAvatar({ setIsEditAvatarOpen, username, imgUrl }) {
                         }
                     </div>
                     <div className='flex items-center justify-around my-10'>
-                        <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium flex items-center gap-2' onClick={removeAvatar}><MdOutlineDelete size={24} /> Remove Photo</button>
+                        {user?.avatar &&
+                            <button className='bg-gray-300 hover:bg-gray-400 text-lg text-black rounded-3xl  py-2 px-4 font-medium flex items-center gap-2' onClick={removeAvatar}><MdOutlineDelete size={24} /> Remove Photo</button>}
                         <button className='bg-red-600 hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium flex items-center gap-2 justify-center' onClick={openCamera}>
                             <MdOutlineCameraAlt /><span> Take Photo</span></button>
                         <div className='bg-red-600 relative hover:bg-red-700 text-lg cursor-pointer text-white rounded-3xl  py-2 px-4 font-medium '> <span className='cursor-pointer flex items-center gap-2'><FaRegImage

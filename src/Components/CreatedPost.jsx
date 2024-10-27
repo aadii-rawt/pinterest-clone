@@ -4,12 +4,14 @@ import { db } from '../firebase';
 import Masonry from 'react-masonry-css';
 import { useData } from '../Context/DataProvider';
 import Post from './Post';
+import PinShimmer from '../Components/Shimmer/PinShimmer'
 
 function CreatedPost({ userId }) {
   const [savedPosts, setSavedPosts] = useState([]); // State to hold saved post details
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
-  const {breakpointColumnsObj} = useData()
+  const { breakpointColumnsObj } = useData()
+  const [isNoCreatedPost, setIsNoCreatedPost] = useState(false)
 
   useEffect(() => {
     const fetchSavedPosts = async () => {
@@ -18,7 +20,6 @@ function CreatedPost({ userId }) {
           // Get the user's Firestore document by UID
           const userDocRef = doc(db, `usersPosts/${userId}`);
           const userDocSnapshot = await getDoc(userDocRef);
-
           if (userDocSnapshot.exists()) {
             // Extract the 'savedPost' array from the document
             const userData = userDocSnapshot.data();
@@ -28,7 +29,7 @@ function CreatedPost({ userId }) {
             const postsPromises = userSavedPosts.map(async (postId) => {
               const postDocRef = doc(db, 'posts', postId); // Assuming 'posts' is the collection where the posts are stored
               const postDocSnapshot = await getDoc(postDocRef);
-              
+
               if (postDocSnapshot.exists()) {
                 return { id: postDocSnapshot.id, ...postDocSnapshot.data() };
               } else {
@@ -41,12 +42,8 @@ function CreatedPost({ userId }) {
             const validPosts = postsData.filter(post => post !== null); // Filter out any null posts
             setSavedPosts(validPosts); // Set the fetched posts into state
           } else {
-            console.error('User document does not exist');
-            setError('User document does not exist');
+            setIsNoCreatedPost(true)
           }
-        } else {
-          console.error('No user is logged in');
-          setError('No user is logged in');
         }
       } catch (error) {
         console.error('Error fetching saved posts:', error);
@@ -59,28 +56,27 @@ function CreatedPost({ userId }) {
     fetchSavedPosts();
   }, [userId]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
-    <div>
-            <Masonry
-                breakpointCols={breakpointColumnsObj}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column"
-            >
-                {savedPosts?.map((data, index) => (
-                    <Post key={index} data={data} showUserDetails={false} />
-                ))
-                }
-            </Masonry>
-        </div>
-  );
+    loading ? <PinShimmer /> : isNoCreatedPost ? <NoPostCreated /> :
+      (<Masonry
+        breakpointCols={breakpointColumnsObj}
+        className="my-masonry-grid"
+        columnClassName="my-masonry-grid_column" >
+        {savedPosts?.map((data, index) => (
+          <Post key={index} data={data} showUserDetails={false} />
+        ))
+        }
+      </Masonry>)
+  )
 }
 
 export default CreatedPost;
+
+function NoPostCreated() {
+  return (
+    <div className='text-center py-20'>
+      <h1 className='text-xl font-semibold'><span className='text-2xl text-orange-300'>:( </span>Look like No Pin created yet </h1>
+    </div>
+  )
+}

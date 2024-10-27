@@ -1,7 +1,7 @@
 import React from 'react'
 import Masonry from 'react-masonry-css';
 
-function Shimmer() {
+function PinShimmer() {
 
     const breakpointColumnsObj = {
         default: 4,
@@ -32,4 +32,4 @@ function Shimmer() {
     )
 }
 
-export default Shimmer
+export default PinShimmer

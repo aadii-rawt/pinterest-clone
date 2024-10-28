@@ -25,7 +25,7 @@ function Profile() {
   return (
     <div className='py-5 relative'>
       <div className='profile flex justify-center items-center flex-col ' >
-        <div className='w-full h-[300px] max-w-[900px] max-h[700px] border-2 rounded-xl bg-cover bg-center cursor-pointer' style={{
+        <div className='w-full h-[200px] md:h-[300px] max-w-[900px] max-h[700px] border-2 md:rounded-xl bg-cover bg-center cursor-pointer' style={{
           backgroundImage: user?.cover ? `url(${user.cover})` : "none",
           backgroundColor: user?.cover ? "transparent" : "rgb(229 231 235)",
         }}
@@ -46,7 +46,7 @@ function Profile() {
           }
         </div>
         <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
-        <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.follower?.length} Follower</h1>
+        {user?.follower?.length  > 0 && <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.follower?.length} Follower</h1>}
       </div>
 
       <div className='my-5'>

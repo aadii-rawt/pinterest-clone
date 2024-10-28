@@ -76,7 +76,7 @@ export default CreatedPost;
 function NoPostCreated() {
   return (
     <div className='text-center py-20'>
-      <h1 className='text-xl font-semibold'><span className='text-2xl text-orange-300'>:( </span>Look like No Pin created yet </h1>
+      <h1 className='text-xl font-semibold'><span className='text-2xl text-orange-300'>:( </span>Looks like no pins have been created yet! </h1>
     </div>
   )
 }

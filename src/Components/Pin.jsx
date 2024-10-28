@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import PinDetails from './PinDetails';
 import Comment from './Comment';
@@ -17,6 +17,8 @@ function Pin() {
     const [morePins, setMorePins] = useState([])
     const { users, fakePins } = useData()
     const [openShareModal, setOpenShareModal] = useState(false)
+    const { user } = useData()
+    const [isSaved, setIsSaved] = useState(false)
     useEffect(() => {
         const fetchPin = async () => {
             try {
@@ -56,6 +58,25 @@ function Pin() {
         setMorePins(morePinsData)
     }, [])
 
+    useEffect(() => {
+        const checkIfPinSaved = async () => {
+            if (!user) return;
+
+            try {
+                const userPostsRef = doc(db, 'usersPosts', user?.userId);
+                const userPostsDoc = await getDoc(userPostsRef);
+                if (userPostsDoc.exists()) {
+                    const savedPosts = userPostsDoc.data().savedPost || [];
+                    setIsSaved(savedPosts.includes(id));
+                }
+            } catch (error) {
+                console.error('Error checking saved status:', error);
+            }
+        };
+
+        checkIfPinSaved();
+    }, [user, id]);
+
     const breakpointColumnsObj = {
         default: 4,
         1100: 3,
@@ -76,9 +97,52 @@ function Pin() {
             });
     }
 
-    function copyLink(){
-        const currentUrl = window.location.href; 
+    function copyLink() {
+        const currentUrl = window.location.href;
         navigator.clipboard.writeText(currentUrl)
+    }
+
+    async function savePin() {
+        if (!user) {
+            alert('Please login to save pins');
+            return;
+        }
+
+        try {
+            const userPostsRef = doc(db, 'usersPosts', user?.userId);
+            await setDoc(userPostsRef, {
+                savedPost: arrayUnion(id)
+            }, { merge: true });
+
+            setIsSaved(true);
+            alert('Pin saved successfully!');
+        } catch (error) {
+            console.error('Error saving pin: ', error);
+            alert('Error saving pin');
+        }
+    }
+
+    async function unsavePin() {
+        if (!user) return;
+
+        try {
+            const userPostsRef = doc(db, 'usersPosts', user?.userId);
+
+            const userPostsDoc = await getDoc(userPostsRef);
+            const currentSavedPosts = userPostsDoc.data()?.savedPost || [];
+
+            const updatedSavedPosts = currentSavedPosts.filter(postId => postId !== id);
+
+            await setDoc(userPostsRef, {
+                savedPost: updatedSavedPosts
+            }, { merge: true });
+
+            setIsSaved(false);
+            alert('Pin unsaved successfully!');
+        } catch (error) {
+            console.error('Error unsaving pin:', error);
+            alert('Error unsaving pin');
+        }
     }
 
     return (
@@ -99,7 +163,7 @@ function Pin() {
                                             <div className='flex items-center justify-between px-3  gap-5 text-xs font-medium'>
                                                 <div className='w-10 h-10 text-center flex flex-col items-center' onClick={copyLink}>
                                                     <button className='bg-gray-200 rounded-full hover:bg-gray-300/70'>
-                                                        <img src="/link.png" alt=""  />
+                                                        <img src="/link.png" alt="" />
                                                     </button>
                                                     <p className='text-nowrap'>Copy link</p>
                                                 </div>
@@ -127,7 +191,10 @@ function Pin() {
                                 </div>
                                 <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2' onClick={() => downloadImage(pin?.img)}><MdOutlineFileDownload size={28} color='black' /></div>
                             </div>
-                            <div><button className='btn bg-redTheme text-white md:px-3 md:py-1.5'>Save</button></div>
+                            <div>
+                                <button className='btn bg-redTheme text-white md:px-3 md:py-1.5' onClick={() => savePin()}>Save</button>
+
+                            </div>
                         </div>
                         <PinDetails id={id} pin={pin} user={userDetails} />
                         <Comment id={id} />
@@ -148,7 +215,7 @@ function Pin() {
                     }
                 </Masonry>
             </div>
-        </div>
+        </div >
     )
 }
 

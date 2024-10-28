@@ -78,7 +78,7 @@ function Header() {
             </Link>
             <MdOutlineKeyboardArrowDown size={25} className='cursor-pointer text-gray-600 hover:text-black hover:bg-gray-200 rounded-full' onClick={() => setViewProfileOpen(!viewProfileOpen)}/>
             {viewProfileOpen &&
-              <div className='absolute top-16 right-3 md:right-0 z-50 bg-gray-100 shadow-md text-black rounded-md p-2.5'>
+              <div className='absolute top-14 md:top-16 right-3 md:right-0 z-50 bg-gray-100 shadow-md text-black rounded-md p-2.5'>
                 <div className='flex items-start gap-2 hover:bg-gray-200 p-2 rounded-md'>
                   <div>
                     {user?.avatar ?

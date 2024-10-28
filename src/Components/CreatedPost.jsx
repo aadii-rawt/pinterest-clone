@@ -23,7 +23,7 @@ function CreatedPost({ userId }) {
           if (userDocSnapshot.exists()) {
             // Extract the 'savedPost' array from the document
             const userData = userDocSnapshot.data();
-            const userSavedPosts = userData?.savedPost || [];
+            const userSavedPosts = userData?.createdPost || [];
 
             // Fetch the details of each saved post
             const postsPromises = userSavedPosts.map(async (postId) => {

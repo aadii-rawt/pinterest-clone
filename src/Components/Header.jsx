@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Login from './Login'
 import Signup from './Singup'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { BiBell, BiLogOut, BiUserCircle } from 'react-icons/bi'
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../firebase'
@@ -31,8 +31,8 @@ function Header() {
           {user ? (
             <div>
               <ul className='flex gap-3 text-lg font-semibold'>
-                <li><Link to='/' className='bg-black text-white px-3 py-2.5 rounded-3xl'>Home</Link></li>
-                <li><Link to='create'>Create</Link></li>
+                <li><NavLink to='/' className='bg-black text-white text-sm md:text-base px-3 py-2.5 rounded-3xl'>Home</NavLink></li>
+                <li><NavLink to='create'>Create</NavLink></li>
               </ul>
             </div>
           ) : (
@@ -78,13 +78,13 @@ function Header() {
             </Link>
             <MdOutlineKeyboardArrowDown size={25} className='cursor-pointer text-gray-600 hover:text-black hover:bg-gray-200 rounded-full' onClick={() => setViewProfileOpen(!viewProfileOpen)}/>
             {viewProfileOpen &&
-              <div className='absolute top-16 right-0 z-50 bg-gray-100 shadow-md text-black rounded-md p-2.5'>
+              <div className='absolute top-16 right-3 md:right-0 z-50 bg-gray-100 shadow-md text-black rounded-md p-2.5'>
                 <div className='flex items-start gap-2 hover:bg-gray-200 p-2 rounded-md'>
                   <div>
                     {user?.avatar ?
                       <img src={user?.avatar} alt="" className='w-12 h-12 rounded-full' />
                       :
-                      <div className='w-12 h-12 rounded-full bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
+                      <div className='w-12 h-12 rounded-full text-xl bg-red-400 capitalize flex items-center justify-center text-white'>{user?.username[0]}</div>
                     }
 
                   </div>

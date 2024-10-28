@@ -75,7 +75,7 @@ export default SavedPost;
 function NoSavedPost() {
   return (
     <div className='text-center py-20'>
-      <h1 className='text-xl font-semibold'><span className='text-2xl text-orange-300'>:( </span>Look like No Pin created yet </h1>
+      <h1 className='text-xl font-semibold'><span className='text-2xl text-orange-300'>:( </span>Looks like there are no saved Pins!</h1>
     </div>
   )
 }

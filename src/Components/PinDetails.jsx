@@ -3,14 +3,29 @@ import CommentList from './CommentList';
 // import { users } from '../utils';
 import { Link } from 'react-router-dom';
 import { useData } from '../Context/DataProvider';
+import { doc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 function PinDetails({ id, pin,user }) {
-    // const [userDetails, setUserDetails] = useState(null)
-    const {users} = useData()
-    // useEffect(() => {
-    //     const userData = users?.find((d) => d?.userId === pin?.createdBy)
-    //     setUserDetails(userData)
-    // }, [pin])
+    // const {user} = useData()
+    const [isuserFollowed,setIsuserFollowed] = useState(false)
+
+    useEffect(() => {
+        const checkUserFollow = async () => {
+            if (!user) return;
+            try {
+                const userPostsRef = doc(db, 'users', user?.userId);
+                const userPostsDoc = await getDoc(userPostsRef);
+                if (userPostsDoc.exists()) {
+                   setIsuserFollowed(false)
+                }
+            } catch (error) {
+                console.error('Error checking saved status:', error);
+            }
+        };
+
+        checkUserFollow();
+    }, [user, id]);
 
     return (
         <div className='pindetails py-3 h-full'>

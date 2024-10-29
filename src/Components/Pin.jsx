@@ -10,6 +10,7 @@ import Masonry from 'react-masonry-css';
 import Post from './Post';
 import { useData } from '../Context/DataProvider';
 import { saveAs } from 'file-saver';
+
 function Pin() {
     const { id } = useParams()
     const [pin, setPin] = useState(null)
@@ -19,7 +20,7 @@ function Pin() {
     const [openShareModal, setOpenShareModal] = useState(false)
     const { user } = useData()
     const [isSaved, setIsSaved] = useState(false)
-    
+
     // -------------------- fetch the pin ----------------------------
     useEffect(() => {
         const fetchPin = async () => {
@@ -85,18 +86,18 @@ function Pin() {
             });
     }
 
-    // -------------------- save the pin ----------------------------
+    // -------------------- copy the link ----------------------------
     function copyLink() {
         const currentUrl = window.location.href;
         navigator.clipboard.writeText(currentUrl)
     }
 
+    // -------------------- save the pin ----------------------------
     async function savePin() {
         if (!user) {
             alert('Please login to save pins');
             return;
         }
-
         try {
             const userPostsRef = doc(db, 'usersPosts', user?.userId);
             await setDoc(userPostsRef, {
@@ -106,6 +107,7 @@ function Pin() {
         } catch (error) {
             console.error('Error saving pin: ', error)
         }
+
     }
 
     // -------------------- unsave the pin ----------------------------
@@ -177,10 +179,10 @@ function Pin() {
                             </div>
                             <div>
                                 <button
-                                    className={`btn ${isSaved ? 'bg-gray-300 text-black' : 'bg-redTheme text-white'}  md:px-3 md:py-1.5`}
+                                    className={`btn ${isSaved ? 'bg-black' : 'bg-redTheme '} text-white  md:px-3 md:py-1.5`}
                                     onClick={() => isSaved ? unsavePin() : savePin()}
                                 >
-                                    {isSaved ? 'Unsave' : 'Save'}
+                                    {isSaved ? 'Saved' : 'Save'}
                                 </button>
                             </div>
                         </div>

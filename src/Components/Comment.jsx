@@ -48,7 +48,7 @@ function Comment({ id }) {
       {user && <div className='flex items-center justify-center'>
         {
           user?.avatar ?
-            <img src={`/${user?.avatar}`} alt="" className='w-9 h-9 rounded-full' />
+            <img src={`${user?.avatar}`} alt="" className='w-9 h-9 rounded-full' />
             :
             <div className='w-9 h-9 rounded-full bg-red-400 flex items-center justify-center text-white text-lg'>{user?.username[0]}</div>
         }

@@ -60,7 +60,7 @@ function CommentList({ id }) {
                         <div key={index} className='flex items-baseline gap-2'>
                             {user?.avatar ? (
                                 <img
-                                    src={`/${user?.avatar}`}
+                                    src={`${user?.avatar}`}
                                     alt="user avatar"
                                     className='w-7 h-7 rounded-full my-2'
                                 />

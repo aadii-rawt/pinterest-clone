@@ -15,10 +15,12 @@ function Pin() {
     const [pin, setPin] = useState(null)
     const [userDetails, setUserDetails] = useState({})
     const [morePins, setMorePins] = useState([])
-    const { users, fakePins } = useData()
+    const { breakpointColumnsObj } = useData()
     const [openShareModal, setOpenShareModal] = useState(false)
     const { user } = useData()
     const [isSaved, setIsSaved] = useState(false)
+    
+    // -------------------- fetch the pin ----------------------------
     useEffect(() => {
         const fetchPin = async () => {
             try {
@@ -50,18 +52,10 @@ function Pin() {
         fetchPin();
     }, [id]);
 
-    useEffect(() => {
-        const morePinsData = fakePins.map((data) => {
-            const userData = users.find((d) => d?.userId === data?.createdBy)
-            return { ...userData, ...data }
-        })
-        setMorePins(morePinsData)
-    }, [])
-
+    // -------------------- check if the pin is saved ----------------------------
     useEffect(() => {
         const checkIfPinSaved = async () => {
             if (!user) return;
-
             try {
                 const userPostsRef = doc(db, 'usersPosts', user?.userId);
                 const userPostsDoc = await getDoc(userPostsRef);
@@ -77,13 +71,7 @@ function Pin() {
         checkIfPinSaved();
     }, [user, id]);
 
-    const breakpointColumnsObj = {
-        default: 4,
-        1100: 3,
-        700: 2,
-        500: 2
-    };
-
+    // -------------------- download the image ----------------------------
 
     function downloadImage(url) {
         fetch(url)
@@ -97,6 +85,7 @@ function Pin() {
             });
     }
 
+    // -------------------- save the pin ----------------------------
     function copyLink() {
         const currentUrl = window.location.href;
         navigator.clipboard.writeText(currentUrl)
@@ -113,15 +102,13 @@ function Pin() {
             await setDoc(userPostsRef, {
                 savedPost: arrayUnion(id)
             }, { merge: true });
-
             setIsSaved(true);
-            alert('Pin saved successfully!');
         } catch (error) {
-            console.error('Error saving pin: ', error);
-            alert('Error saving pin');
+            console.error('Error saving pin: ', error)
         }
     }
 
+    // -------------------- unsave the pin ----------------------------
     async function unsavePin() {
         if (!user) return;
 
@@ -136,12 +123,9 @@ function Pin() {
             await setDoc(userPostsRef, {
                 savedPost: updatedSavedPosts
             }, { merge: true });
-
             setIsSaved(false);
-            alert('Pin unsaved successfully!');
         } catch (error) {
             console.error('Error unsaving pin:', error);
-            alert('Error unsaving pin');
         }
     }
 
@@ -192,8 +176,12 @@ function Pin() {
                                 <div className='cursor-pointer rounded-full flex items-center justify-center hover:bg-grayTheme w-10 h-10 p-2' onClick={() => downloadImage(pin?.img)}><MdOutlineFileDownload size={28} color='black' /></div>
                             </div>
                             <div>
-                                <button className='btn bg-redTheme text-white md:px-3 md:py-1.5' onClick={() => savePin()}>Save</button>
-
+                                <button
+                                    className={`btn ${isSaved ? 'bg-gray-300 text-black' : 'bg-redTheme text-white'}  md:px-3 md:py-1.5`}
+                                    onClick={() => isSaved ? unsavePin() : savePin()}
+                                >
+                                    {isSaved ? 'Unsave' : 'Save'}
+                                </button>
                             </div>
                         </div>
                         <PinDetails id={id} pin={pin} user={userDetails} />

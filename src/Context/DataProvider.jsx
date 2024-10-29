@@ -1,4 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
+import { auth, db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const dataContext = createContext();
 
@@ -116,10 +119,30 @@ export default function DataProvider({ children }) {
         1100: 3,
         700: 2,
         500: 2
-      };
-    
+    };
+
+    useEffect(() => {
+
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Fetch user details from Firestore using the user's UID
+                getDoc(doc(db, "users", user.uid)).then((userDoc) => {
+                    if (userDoc.exists()) {
+                        setUser(userDoc.data());
+                        console.log("User is still logged in.");
+                    }
+                });
+            } else {
+                console.log("No user is logged in.");
+            }
+        });
+
+        // Cleanup the listener on component unmount
+        return () => unsubscribe();
+    }, []);
+
     return <dataContext.Provider value={{
-        user, setUser, showLoginModel, setShowLoginModel, users, setUsers, fakePins, setFakePins,breakpointColumnsObj
+        user, setUser, showLoginModel, setShowLoginModel, users, setUsers, fakePins, setFakePins, breakpointColumnsObj
     }}>
         {children}
     </dataContext.Provider>

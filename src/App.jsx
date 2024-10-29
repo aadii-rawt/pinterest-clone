@@ -52,29 +52,6 @@ function App() {
   //   }
   // }, [user])
 
-
-// Inside your component
-useEffect(() => {
-
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // Fetch user details from Firestore using the user's UID
-      getDoc(doc(db, "users", user.uid)).then((userDoc) => {
-        if (userDoc.exists()) {
-          setUser(userDoc.data());
-          console.log("User is still logged in.");
-        }
-      });
-    } else {
-      console.log("No user is logged in.");
-    }
-  });
-
-  // Cleanup the listener on component unmount
-  return () => unsubscribe();
-}, []);
-
-
   return (
     <RouterProvider router={router} />
   )

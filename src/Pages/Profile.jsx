@@ -19,7 +19,10 @@ function Profile() {
   const { user, users, fakePins } = useData()
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   const [isEditCoverOpen, setIsEditCoverOpen] = useState(false)
-  const [isFollowerOpen, setIsFollowerOpen] = useState(false)
+  const [isFollowerOpen, setIsFollowerOpen] = useState({
+    isOpen: false,
+    title: ""
+  })
   const [isSavedSelected, setIsSavedSelected] = useState(true)
 
   return (
@@ -46,7 +49,18 @@ function Profile() {
           }
         </div>
         <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
-        {user?.follower?.length  > 0 && <h1 className='font-semibold text-base cursor-pointer' onClick={() => setIsFollowerOpen(true)}>{user?.follower?.length} Follower</h1>}
+        <div className='flex gap-2'>
+          {/* followers */}
+          {user?.following?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => setIsFollowerOpen({
+            isOpen: true,
+            title: "following"
+          })}>{user?.following?.length} Following</h1>}
+          {/* following */}
+          {user?.follower?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => setIsFollowerOpen({
+            isOpen: true,
+            title: "follower"
+          })}>{user?.follower?.length} Follower</h1>}
+        </div>
       </div>
 
       <div className='my-5'>
@@ -58,7 +72,7 @@ function Profile() {
         {user && isSavedSelected ? <CreatedPost userId={user?.userId} /> : <SavedPost userId={user?.userId} />}
       </div>
       {/* ---------------------- modals ------------------------------------ */}
-      {isFollowerOpen && <FollowersModal setIsFollowerOpen={setIsFollowerOpen} />}
+      {isFollowerOpen?.isOpen && <FollowersModal isFollowerOpen={isFollowerOpen} setIsFollowerOpen={setIsFollowerOpen} />}
       {isEditAvatarOpen && <EditAvatar setIsEditAvatarOpen={setIsEditAvatarOpen} imgUrl={user?.avatar} username={user?.username} />}
       {isEditCoverOpen && <EditCover setIsEditCoverOpen={setIsEditCoverOpen} imgUrl={user?.cover} />}
 

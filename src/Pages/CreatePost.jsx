@@ -44,7 +44,7 @@ function CreatePost() {
             createdBy: user?.userId,
             createdAt: serverTimestamp(),
         });
-
+        
         // Clear post inputs
         setFormData({
             title: '',

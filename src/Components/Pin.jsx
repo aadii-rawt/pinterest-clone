@@ -186,7 +186,7 @@ function Pin() {
                                 </button>
                             </div>
                         </div>
-                        <PinDetails id={id} pin={pin} user={userDetails} />
+                        <PinDetails id={id} pin={pin} userDetails={userDetails} />
                         <Comment id={id} />
                     </div>
                 </div>

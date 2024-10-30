@@ -7,10 +7,11 @@ import { Link } from 'react-router-dom';
 import { RxCross2 } from 'react-icons/rx';
 import FollowersShimmer from './Shimmer/FollowersShimmer';
 
-function FollowersModal({ setIsFollowerOpen, title = "Follower" }) {
+function FollowersModal({ setIsFollowerOpen, isFollowerOpen}) {
     const [followers, setFollowers] = useState([])
     const [loading,setLoading] = useState(true)
     const { user } = useData()
+    
     useEffect(() => {
         const fetchFollowers = async () => {
             const db = getFirestore();
@@ -19,7 +20,7 @@ function FollowersModal({ setIsFollowerOpen, title = "Follower" }) {
 
             if (userSnap.exists()) {
                 const userData = userSnap.data();
-                const followerIds = userData.follower || [];
+                const followerIds = userData?.[isFollowerOpen?.title] || [];
 
                 const usersRef = collection(db, 'users');
                 const q = query(usersRef, where('__name__', 'in', followerIds));
@@ -40,11 +41,12 @@ function FollowersModal({ setIsFollowerOpen, title = "Follower" }) {
         console.log(followers);
 
     }, [user?.userId]);
+
     return createPortal(
         <div className='w-full min-h-screen max-h-screen bg-black/50 fixed top-0 left-0 z-50 flex items-center justify-center' onClick={(() => setIsFollowerOpen(false))}>
             <div className='w-[500px] max-h-[410px] follower-modal relative overflow-hidden  overflow-y-scroll rounded-lg  bg-white' onClick={(e) => e.stopPropagation()}>
                 <div className='py-5  sticky bg-white top-0 left-0'>
-                    <h1 className='font-semibold text-2xl text-center'>{title}</h1>
+                    <h1 className='font-semibold text-2xl text-center capitalize'>{isFollowerOpen?.title}</h1>
                     <div className='absolute right-5 cursor-pointer top-5' onClick={(() => setIsFollowerOpen(false))}>
                         <RxCross2 size={24} />
                     </div>
@@ -53,7 +55,7 @@ function FollowersModal({ setIsFollowerOpen, title = "Follower" }) {
                 <div className='space-y-3 px-6 py-2'>
                     {followers?.length > 0 &&
                         followers.map((f) => (
-                            <div className='flex items-center justify-between'>
+                            <div key={f?.userId} className='flex items-center justify-between'>
                                 <div className='flex gap-3 items-center'>
                                     {f?.avatar ?
                                      <Link to={`/user/${f?.username}`}>

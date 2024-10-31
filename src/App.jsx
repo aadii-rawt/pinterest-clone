@@ -11,6 +11,7 @@ const Profile = lazy(() => import('./Pages/Profile'))
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from "./firebase";
 import { doc, getDoc } from "firebase/firestore";
+import NotFound from "./Pages/NotFound";
 
 
 
@@ -39,7 +40,8 @@ const router = createBrowserRouter([
         path: "/user/:id",
         element: <UserProfile />
       }
-    ]
+    ],
+    errorElement: <NotFound />
   }
 ])
 

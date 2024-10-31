@@ -16,7 +16,7 @@ import SavedPost from '../Components/SavedPost';
 function Profile() {
 
   const { id } = useParams()
-  const { user, users, fakePins } = useData()
+  const { user, setShowLoginModel } = useData()
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   const [isEditCoverOpen, setIsEditCoverOpen] = useState(false)
   const [isFollowerOpen, setIsFollowerOpen] = useState({
@@ -25,10 +25,20 @@ function Profile() {
   })
   const [isSavedSelected, setIsSavedSelected] = useState(true)
 
+  const showFollowersFollowing = (title) => {
+    if(!user){
+      setShowLoginModel(true)
+    }
+    setIsFollowerOpen({
+      isOpen: true,
+      title: title
+    })
+  }
+
   return (
     <div className='py-5 relative'>
       <div className='profile flex justify-center items-center flex-col ' >
-        <div className='w-full h-[200px] md:h-[300px] max-w-[900px] max-h[700px] border-2 md:rounded-xl bg-cover bg-center cursor-pointer' style={{
+        <div className='w-full h-[180px] md:h-[300px] max-w-[900px] max-h[700px] border-2 md:rounded-xl bg-cover bg-center cursor-pointer' style={{
           backgroundImage: user?.cover ? `url(${user.cover})` : "none",
           backgroundColor: user?.cover ? "transparent" : "rgb(229 231 235)",
         }}
@@ -50,16 +60,10 @@ function Profile() {
         </div>
         <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
         <div className='flex gap-2'>
-          {/* followers */}
-          {user?.following?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => setIsFollowerOpen({
-            isOpen: true,
-            title: "following"
-          })}>{user?.following?.length} Following</h1>}
           {/* following */}
-          {user?.follower?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => setIsFollowerOpen({
-            isOpen: true,
-            title: "follower"
-          })}>{user?.follower?.length} Follower</h1>}
+          {user?.following?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => showFollowersFollowing("following")}>{user?.following?.length} Following</h1>}
+          {/* followers */}
+          {user?.follower?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => showFollowersFollowing("follower")}>{user?.follower?.length} Follower</h1>}
         </div>
       </div>
 

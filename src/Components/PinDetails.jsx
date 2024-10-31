@@ -7,7 +7,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 function PinDetails({ id, pin, userDetails }) {
-    const { user } = useData()
+    const { user,setShowLoginModel } = useData()
     const [isuserFollowed, setIsuserFollowed] = useState(false)
 
     useEffect(() => {
@@ -31,7 +31,9 @@ function PinDetails({ id, pin, userDetails }) {
     }, [user, userDetails]);
 
     const handleFollowToggle = async () => {
-        if (!user) return; // Handle not logged in case
+        if (!user) {
+            setShowLoginModel(true)
+        } 
     
         try {
             const userDocRef = doc(db, 'users', user?.userId);

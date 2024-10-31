@@ -54,9 +54,9 @@ function Profile() {
                         <h1 className='text-3xl font-medium text-center'>{user?.username}</h1>
                     </div>
                     <div className='flex gap-2'>
-                        {<button>{user?.follower?.length || 0} followers</button>}
+                        {<button onClick={() => showFollowersFollowing("follower")}>{user?.follower?.length || 0} followers</button>}
                         <span>●</span>
-                        <button>{user?.following?.length || 0} following</button>
+                        <button onClick={() => showFollowersFollowing("following")}>{user?.following?.length || 0} following</button>
                     </div>
                     <div>
                         <button

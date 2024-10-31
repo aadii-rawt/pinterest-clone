@@ -37,37 +37,42 @@ function Profile() {
 
   return (
     <div className='py-5 relative'>
-      <div className='profile flex justify-center items-center flex-col ' >
-        <div className='w-full h-[180px] md:h-[300px] max-w-[900px] max-h[700px] border-2 md:rounded-xl bg-cover bg-center cursor-pointer' style={{
-          backgroundImage: user?.cover ? `url(${user.cover})` : "none",
-          backgroundColor: user?.cover ? "transparent" : "rgb(229 231 235)",
-        }}
-          onClick={() => setIsEditCoverOpen(true)}>
-        </div>
-        <div className='-mt-10' onClick={(e) => {
-          e.stopPropagation()
-          setIsEditAvatarOpen(true)
-        }}>
-          {user?.avatar ?
-            <div className='flex items-center justify-center bg-green-300 w-24 h-fit max-h-24 border-2 cursor-pointer rounded-full'>
-              <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
+      <div className='flex w-full flex-col-reverse md:flex-row items-start justify-between relative'>
+                <div className={`${user?.cover && "-mt-14"} w-full flex items-center flex-col justify-center md:flex  md:items-start  space-y-3 md:mt-5`}>
+                    <div className='md:flex items-center gap-3'>
+                        {/*----------- user avatar------------  */}
+                        {user?.avatar ?
+                            <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full border-2' onClick={() => setIsEditAvatarOpen(true)}>
+                                <img src={user?.avatar} alt="" className='rounded-full w-full h-full' />
+                            </div>
+                            :
+                            <div className='flex items-center justify-center bg-red-300 w-24 h-24 cursor-pointer rounded-full' onClick={() => setIsEditAvatarOpen(true)}>
+                                <h1 className='text-4xl font-semibold capitalize'>{user?.username?.[0]}</h1>
+                            </div>
+                        }
+                        {/*----------- user name------------  */}
+                        <h1 className='text-3xl font-medium text-center'>{user?.username}</h1>
+                    </div>
+                    <div className='flex gap-2'>
+                        {<button>{user?.follower?.length || 0} followers</button>}
+                        <span>●</span>
+                        <button>{user?.following?.length || 0} following</button>
+                    </div>
+                    <div>
+                        <button
+                            // onClick={handleFollowToggle}
+                            className="btn bg-gray-300 text-black" >
+                            {/* {isuserFollowed ? 'Followed' : 'Follow'} */}
+                            Share
+                        </button>
+                    </div>
+                </div>
+                <div className='md:rounded-3xl min-w-[600px] overflow-hidden max-h-[400px] cursor-pointer' onClick={() => setIsEditCoverOpen(true)}>
+                    <img src={user?.cover} alt="" />
+                </div>
             </div>
-            :
-            <div className='flex items-center justify-center bg-green-300 w-24 h-24 cursor-pointer rounded-full'>
-              <h1 className='text-4xl font-semibold capitalize'>{user?.username?.[0]}</h1>
-            </div>
-          }
-        </div>
-        <h1 className='my-2 font-semibold text-4xl capitalize'>{user?.username}</h1>
-        <div className='flex gap-2'>
-          {/* following */}
-          {user?.following?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => showFollowersFollowing("following")}>{user?.following?.length} Following</h1>}
-          {/* followers */}
-          {user?.follower?.length > 0 && <h1 className=' text-gray-700 text-base cursor-pointer' onClick={() => showFollowersFollowing("follower")}>{user?.follower?.length} Follower</h1>}
-        </div>
-      </div>
 
-      <div className='my-5'>
+      <div className='my-5 mt-9'>
         <div className='flex items-center justify-center text-base font-semibold gap-4 my-5'>
           <button className={`  ${isSavedSelected && "border-b-4 border-red-600 py-2"}`} onClick={() => setIsSavedSelected(true)}>Created</button>
           <button className={` ${!isSavedSelected && "border-b-4 border-red-600 py-2"}`} onClick={() => setIsSavedSelected(false)}>Saved</button>

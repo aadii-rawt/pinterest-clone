@@ -18,7 +18,7 @@ function Pin() {
     const [morePins, setMorePins] = useState([])
     const { breakpointColumnsObj } = useData()
     const [openShareModal, setOpenShareModal] = useState(false)
-    const { user } = useData()
+    const { user,setShowLoginModel } = useData()
     const [isSaved, setIsSaved] = useState(false)
 
     // -------------------- fetch the pin ----------------------------
@@ -95,7 +95,7 @@ function Pin() {
     // -------------------- save the pin ----------------------------
     async function savePin() {
         if (!user) {
-            alert('Please login to save pins');
+            setShowLoginModel(true)
             return;
         }
         try {

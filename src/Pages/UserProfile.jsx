@@ -7,10 +7,11 @@ import Post from '../Components/Post'
 import { useData } from '../Context/DataProvider';
 import EditAvatar from '../Components/EditAvatar';
 import Masonry from 'react-masonry-css';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import FollowersModal from '../Components/FollowersModal';
 import CreatedPost from '../Components/CreatedPost';
 import SavedPost from '../Components/SavedPost';
+import NotFound from './NotFound';
 
 function UserProfile() {
     const { id } = useParams();
@@ -20,7 +21,7 @@ function UserProfile() {
     const [isFollowerOpen, setIsFollowerOpen] = useState(false);
     const [pins, setPins] = useState([]);
     const { setShowLoginModel, user } = useData()
-
+    const [notFound,setNotFound] = useState(false)
     useEffect(() => {
         const fetchUser = async () => {
             //   setLoading(true);
@@ -35,10 +36,10 @@ function UserProfile() {
                         setUserData(doc.data()); // Set the matched user data
                     });
                 } else {
-                    console.log('No user found with this username');
+                    setNotFound(true)
                 }
             } catch (error) {
-                console.error('Error fetching user: ', error);
+                setNotFound(true)
             } finally {
                 // setLoading(false);
             }
@@ -50,15 +51,8 @@ function UserProfile() {
 
     }, [id]);
 
-    const breakpointColumnsObj = {
-        default: 5,
-        1100: 3,
-        700: 2,
-        500: 2
-    };
 
     const [isuserFollowed, setIsuserFollowed] = useState(false)
-
     useEffect(() => {
         const checkUserFollow = async () => {
             if (user && userData?.userId) {
@@ -125,6 +119,10 @@ function UserProfile() {
             console.error('Error updating follow status:', error);
         }
     };
+
+    if(notFound){
+        return <NotFound />
+    }
 
     return (
         <div className='py-5 relative'>

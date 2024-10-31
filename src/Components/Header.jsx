@@ -26,7 +26,7 @@ function Header() {
   return (
     <div className='sticky container bg-white inset-0 z-30  flex justify-between items-center py-3'>
       <div className='flex gap-3 items-center'>
-        <img src="logo.png" alt="" className="w-8" />
+        <img src="/logo.png" alt="" className="w-8" />
         <div>
           {user ? (
             <div>

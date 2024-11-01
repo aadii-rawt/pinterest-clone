@@ -21,11 +21,11 @@ function UserProfile() {
     const [isFollowerOpen, setIsFollowerOpen] = useState(false);
     const [pins, setPins] = useState([]);
     const { setShowLoginModel, user } = useData()
-    const [notFound,setNotFound] = useState(false)
+    const [notFound, setNotFound] = useState(false)
     useEffect(() => {
         const fetchUser = async () => {
             //   setLoading(true);
-           
+
             try {
                 const cleanId = id.replace(/[{}]/g, '');
                 // Firestore query to fetch user whose username matches the param `id`
@@ -36,10 +36,10 @@ function UserProfile() {
                         setUserData(doc.data()); // Set the matched user data
                     });
                 } else {
-                    setNotFound(true)
+                    // setNotFound(true)
                 }
             } catch (error) {
-                setNotFound(true)
+                // setNotFound(true)
             } finally {
                 // setLoading(false);
             }
@@ -120,7 +120,7 @@ function UserProfile() {
         }
     };
 
-    if(notFound){
+    if (notFound) {
         return <NotFound />
     }
 

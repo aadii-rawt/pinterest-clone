@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { auth, db, imgDb } from '../firebase';
+import { db, imgDb } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { addDoc, collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { arrayUnion, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useData } from '../Context/DataProvider';
 
 function CreatePost() {
@@ -14,7 +13,8 @@ function CreatePost() {
     link: '',
     tags: '',
   });
-  
+  const [loading, setLoading] = useState(false)
+
   const [img, setImg] = useState();
 
   // Handle form data
@@ -26,40 +26,46 @@ function CreatePost() {
   // Add post to the database
   async function handleSubmit(e) {
     e.preventDefault();
+  setLoading(true)
 
     try {
-        // Upload image to Firebase Storage
-        const refrs = ref(imgDb, `posts/${crypto.randomUUID()}`);
-        const data = await uploadBytes(refrs, img);
-        const imgURL = await getDownloadURL(data.ref);
+      // Upload image to Firebase Storage
+      const refrs = ref(imgDb, `posts/${crypto.randomUUID()}`);
+      const data = await uploadBytes(refrs, img);
+      const imgURL = await getDownloadURL(data.ref);
 
-        // Manually create a document ID
-        const postId = crypto.randomUUID(); // Generate a unique ID
+      // Manually create a document ID
+      const postId = crypto.randomUUID(); // Generate a unique ID
 
-        // Use setDoc to add the post with a specific document ID
-        await setDoc(doc(db, 'posts', postId), {
-            id: postId, // Assign the post ID to be the same as the document ID
-            ...formData,
-            img: imgURL,
-            createdBy: user?.userId,
-            createdAt: serverTimestamp(),
-        });
-        
-        // Clear post inputs
-        setFormData({
-            title: '',
-            img: '',
-            description: '',
-            link: '',
-            tags: '',
-        });
-        setImg();
+      // Use setDoc to add the post with a specific document ID
+      await setDoc(doc(db, 'posts', postId), {
+        id: postId, // Assign the post ID to be the same as the document ID
+        ...formData,
+        img: imgURL,
+        createdBy: user?.userId,
+        createdAt: serverTimestamp(),
+      });
+      // store data in the userspost collection
+      const userPostRef = doc(db, 'usersPosts', user?.userId);
+      await setDoc(userPostRef, {
+        createdPost: arrayUnion(postId)
+      }, { merge: true });
 
-        console.log('Post created with ID:', postId);
+      // Clear post inputs
+      setFormData({
+        title: '',
+        img: '',
+        description: '',
+        link: '',
+        tags: '',
+      });
+      setImg();
     } catch (error) {
-        console.error('Error creating post:', error);
+      console.error('Error creating post:', error);
+    }finally{
+      setLoading(false)
     }
-}
+  }
 
   return (
     <div className='grid md:grid-cols-2 items-center justify-items-center py-5'>
@@ -145,8 +151,8 @@ function CreatePost() {
           </div>
 
           <div className='flex items-center justify-between'>
-            <button className='btn bg-red-500 text-white font-semibold hover:bg-redTheme' type='submit'>
-              Submit
+            <button className='btn bg-red-500 text-white font-semibold hover:bg-redTheme' type='submit' disabled={loading}>
+             Submit
             </button>
           </div>
         </form>

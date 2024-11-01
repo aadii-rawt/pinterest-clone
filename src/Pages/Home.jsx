@@ -9,7 +9,7 @@ import Masonry from 'react-masonry-css';
 import PinShimmer from '../Components/Shimmer/PinShimmer';
 function Home() {
   const [pins, setPins] = useState([])
-  const { fakePins, users } = useData()
+  const { breakpointColumnsObj } = useData()
   const [lastDoc, setLastDoc] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -45,13 +45,6 @@ function Home() {
     fetchPosts();
   }, []);
 
-
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    700: 2,
-    500: 2
-  };
 
   if (loading) {
     return <PinShimmer />

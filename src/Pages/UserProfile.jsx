@@ -22,10 +22,9 @@ function UserProfile() {
     const [pins, setPins] = useState([]);
     const { setShowLoginModel, user } = useData()
     const [notFound, setNotFound] = useState(false)
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchUser = async () => {
-            //   setLoading(true);
-
             try {
                 const cleanId = id.replace(/[{}]/g, '');
                 // Firestore query to fetch user whose username matches the param `id`
@@ -36,10 +35,10 @@ function UserProfile() {
                         setUserData(doc.data()); // Set the matched user data
                     });
                 } else {
-                    // setNotFound(true)
+                    setNotFound(true)
                 }
             } catch (error) {
-                // setNotFound(true)
+                setNotFound(true)
             } finally {
                 // setLoading(false);
             }
@@ -51,9 +50,13 @@ function UserProfile() {
 
     }, [id]);
 
-
     const [isuserFollowed, setIsuserFollowed] = useState(false)
     useEffect(() => {
+
+        if (user?.username === id) {
+            navigate("/Profile")
+        }
+
         const checkUserFollow = async () => {
             if (user && userData?.userId) {
                 try {

@@ -82,7 +82,7 @@ function CommentList({ id }) {
                     );
                 })
             ) : (
-                <p>No comments yet</p>
+                <p className='p-3'>No comments yet.</p>
             )}
         </div>
     );

@@ -2,22 +2,23 @@ import React, { useState } from 'react'
 import img from "../../public/img3.jpg";
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { IoMdSend } from 'react-icons/io';
 import { useData } from '../Context/DataProvider'
-import { comment } from 'postcss';
+import { useDispatch } from 'react-redux';
+import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 function Comment({ id }) {
 
-  const { user, setShowLoginModel, commentsData, setCommentsData } = useData()
+  const { user } = useData()
 
   const [newComment, setNewComment] = useState("");
+  const dispatch = useDispatch()
 
   // // add new comment
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     
     if (!user) {
-      return setShowLoginModel(true); // Show login modal if user isn't authenticated
+      return dispatch(setShowLoginModel(true)); // Show login modal if user isn't authenticated
     }
 
     if (!newComment.trim()) return; // Prevent empty comment submission

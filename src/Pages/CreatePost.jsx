@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { db, imgDb } from '../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { arrayUnion, doc, serverTimestamp, setDoc } from 'firebase/firestore';
-import { useData } from '../Context/DataProvider';
+import { useSelector } from 'react-redux';
 
 function CreatePost() {
-  const { user } = useData();
+  const {user} = useSelector(state => state.userSlice)
   const [formData, setFormData] = useState({
     title: '',
     img: '',

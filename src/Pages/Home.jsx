@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import Pin from '../Components/Pin'
 import { db } from '../firebase';
 import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { useData } from '../Context/DataProvider';
 import Post from '../Components/Post';
-// import { fakePins, users } from '../utils'
 import Masonry from 'react-masonry-css';
 import PinShimmer from '../Components/Shimmer/PinShimmer';
+import { useSelector } from 'react-redux';
 function Home() {
   const [pins, setPins] = useState([])
-  const { breakpointColumnsObj } = useData()
+  const {breakpointColumnsObj} = useSelector(state => state.statesSlice)
   const [lastDoc, setLastDoc] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);

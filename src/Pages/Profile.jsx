@@ -1,22 +1,16 @@
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '../firebase';
-// import Post from '../Components/Pin';
-import Post from '../Components/Post'
-import { useData } from '../Context/DataProvider';
+
+import React, { useState } from 'react'
 import EditAvatar from '../Components/EditAvatar';
-import Masonry from 'react-masonry-css';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import FollowersModal from '../Components/FollowersModal';
 import EditCover from '../Components/EditCover';
 import CreatedPost from '../Components/CreatedPost';
 import SavedPost from '../Components/SavedPost';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function Profile() {
-
-  const { id } = useParams()
-  const { user, setShowLoginModel } = useData()
+  const {user} = useSelector(state => state.userSlice)
   const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false)
   const [isEditCoverOpen, setIsEditCoverOpen] = useState(false)
   const [isFollowerOpen, setIsFollowerOpen] = useState({
@@ -25,10 +19,11 @@ function Profile() {
   })
   const [isSavedSelected, setIsSavedSelected] = useState(true)
   const [openShareModal, setOpenShareModal] = useState(false)
+  const dispatch = useDispatch()
 
   const showFollowersFollowing = (title) => {
     if (!user) {
-      setShowLoginModel(true)
+      dispatch(setShowLoginModel(true))
     }
     setIsFollowerOpen({
       isOpen: true,
@@ -104,7 +99,7 @@ function Profile() {
             }
           </div>
         </div>
-        <div className='md:rounded-3xl min-w-[600px] overflow-hidden max-h-[400px] cursor-pointer' onClick={() => setIsEditCoverOpen(true)}>
+        <div className='md:rounded-3xl md:min-w-[600px] overflow-hidden w-full md:max-h-[400px] cursor-pointer' onClick={() => setIsEditCoverOpen(true)}>
           <img src={user?.cover} alt="" />
         </div>
       </div>

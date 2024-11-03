@@ -1,33 +1,29 @@
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import Masonry from 'react-masonry-css';
-import { useData } from '../Context/DataProvider';
 import Post from './Post';
 import PinShimmer from '../Components/Shimmer/PinShimmer'
+import { useSelector } from 'react-redux';
 
 function CreatedPost({ userId }) {
-  const [savedPosts, setSavedPosts] = useState([]); // State to hold saved post details
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const { breakpointColumnsObj } = useData()
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { breakpointColumnsObj } = useSelector(state => state.statesSlice)
   const [isNoCreatedPost, setIsNoCreatedPost] = useState(false)
 
   useEffect(() => {
     const fetchSavedPosts = async () => {
       try {
         if (userId) {
-          // Get the user's Firestore document by UID
           const userDocRef = doc(db, `usersPosts/${userId}`);
           const userDocSnapshot = await getDoc(userDocRef);
           if (userDocSnapshot.exists()) {
-            // Extract the 'savedPost' array from the document
             const userData = userDocSnapshot.data();
             const userSavedPosts = userData?.createdPost || [];
-
-            // Fetch the details of each saved post
             const postsPromises = userSavedPosts.map(async (postId) => {
-              const postDocRef = doc(db, 'posts', postId); // Assuming 'posts' is the collection where the posts are stored
+              const postDocRef = doc(db, 'posts', postId);
               const postDocSnapshot = await getDoc(postDocRef);
 
               if (postDocSnapshot.exists()) {
@@ -39,8 +35,8 @@ function CreatedPost({ userId }) {
             });
 
             const postsData = await Promise.all(postsPromises);
-            const validPosts = postsData.filter(post => post !== null); // Filter out any null posts
-            setSavedPosts(validPosts); // Set the fetched posts into state
+            const validPosts = postsData.filter(post => post !== null); 
+            setSavedPosts(validPosts); 
           } else {
             setIsNoCreatedPost(true)
           }

@@ -1,16 +1,15 @@
 import { collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { MdCancel } from 'react-icons/md'
-import { useData } from '../Context/DataProvider';
 import { Link } from 'react-router-dom';
 import { RxCross2 } from 'react-icons/rx';
 import FollowersShimmer from './Shimmer/FollowersShimmer';
+import { useSelector } from 'react-redux';
 
 function FollowersModal({ setIsFollowerOpen, isFollowerOpen}) {
     const [followers, setFollowers] = useState([])
     const [loading,setLoading] = useState(true)
-    const { user } = useData()
+    const {user} = useSelector(state => state.userSlice)
     
     useEffect(() => {
         const fetchFollowers = async () => {

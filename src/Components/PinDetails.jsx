@@ -5,10 +5,14 @@ import { Link } from 'react-router-dom';
 import { useData } from '../Context/DataProvider';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function PinDetails({ id, pin, userDetails }) {
-    const { user,setShowLoginModel } = useData()
+    const { user } = useData()
     const [isuserFollowed, setIsuserFollowed] = useState(false)
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
         const checkUserFollow = async () => {
@@ -32,22 +36,21 @@ function PinDetails({ id, pin, userDetails }) {
 
     const handleFollowToggle = async () => {
         if (!user) {
-            setShowLoginModel(true)
-        } 
-    
+            return dispatch(setShowLoginModel(true))
+        }
         try {
             const userDocRef = doc(db, 'users', user?.userId);
             const pinUserDocRef = doc(db, 'users', userDetails?.userId);
-            
+
             const [userDoc, pinUserDoc] = await Promise.all([
                 getDoc(userDocRef),
                 getDoc(pinUserDocRef)
             ]);
-    
+
             if (userDoc.exists() && pinUserDoc.exists()) {
                 const following = userDoc.data()?.following || [];
                 const followers = pinUserDoc.data()?.follower || [];
-                
+
                 if (isuserFollowed) {
                     // Unfollow: Remove from both following and followers arrays
                     await Promise.all([
@@ -69,15 +72,13 @@ function PinDetails({ id, pin, userDetails }) {
                         })
                     ]);
                 }
-    
+
                 setIsuserFollowed(!isuserFollowed);
             }
         } catch (error) {
             console.error('Error updating follow status:', error);
         }
     };
-    
-
 
     return (
         <div className='pindetails py-3 h-full'>
@@ -98,8 +99,8 @@ function PinDetails({ id, pin, userDetails }) {
                     <button
                         onClick={handleFollowToggle}
                         className={`btn border md:px-3 md:py-1.5 ${isuserFollowed
-                                ? 'bg-black text-white'
-                                : 'border-gray-700'
+                            ? 'bg-black text-white'
+                            : 'border-gray-700'
                             }`}
                     >
                         {isuserFollowed ? 'Followed' : 'Follow'}

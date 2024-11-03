@@ -7,13 +7,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../firebase'
 import { MdCancel, MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { useData } from '../Context/DataProvider'
-import { AiOutlineLogout } from 'react-icons/ai'
+import {setShowLoginModel} from '../Store/Reducers/statesSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Header() {
   const [searchText, setSearchText] = useState("")
   const [showLinks, setShowLinks] = useState(false) // show links when user click  // show login model
   const [showSignupModal, setShowSignupModal] = useState(false) // show signup model
-  const { user, showLoginModel, setShowLoginModel } = useData();
+  const { user } = useData();
   const [viewProfileOpen, setViewProfileOpen] = useState(false)
   const navigate = useNavigate()
   function handleSingOut() {
@@ -21,6 +22,9 @@ function Header() {
     navigate("/")
     setViewProfileOpen(false)
   }
+
+  const { showLoginModel } = useSelector((state) => state.statesSlice)
+  const dispatch = useDispatch()
 
 
   return (
@@ -85,14 +89,13 @@ function Header() {
               </div>
             }
           </> :
-          <> <button className='btn bg-grayTheme text-black' onClick={() => setShowLoginModel(true)}>Log in
+          <> <button className='btn bg-grayTheme text-black' onClick={() => dispatch(setShowLoginModel(true))}>Log in
             {showLoginModel && <Login />}
           </button>
             <button className='btn bg-redTheme text-white' onClick={() => setShowSignupModal(true)}>Sign up
-              {showSignupModal && <Signup setShowSignupModal={setShowSignupModal} />}
+              {showSignupModal && <Signup  setShowSignupModal={setShowSignupModal} />}
             </button></>}
       </div>
-
 
     </div >
   )

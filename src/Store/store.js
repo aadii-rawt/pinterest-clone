@@ -1,8 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import statesSlice from "./Reducers/statesSlice";
+import userSlice from "./Reducers/userReducer";
 
-export const store = configureStore({
-    reducer: {
-        statesSlice: statesSlice,
-    },
-  });
+const reducer = combineReducers({
+    statesSlice: statesSlice,
+    userSlice: userSlice
+  })
+
+export const store = configureStore({reducer});

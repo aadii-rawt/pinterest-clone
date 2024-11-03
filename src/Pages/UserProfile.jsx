@@ -1,17 +1,14 @@
-import { collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '../firebase';
-// import Post from '../Components/Pin';
-import Post from '../Components/Post'
-import { useData } from '../Context/DataProvider';
+import {  db } from '../firebase';
 import EditAvatar from '../Components/EditAvatar';
-import Masonry from 'react-masonry-css';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import FollowersModal from '../Components/FollowersModal';
 import CreatedPost from '../Components/CreatedPost';
 import SavedPost from '../Components/SavedPost';
 import NotFound from './NotFound';
+import { useDispatch } from 'react-redux';
+import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function UserProfile() {
     const { id } = useParams();
@@ -19,10 +16,10 @@ function UserProfile() {
     const [isSavedSelected, setIsSavedSelected] = useState(true)
     const [isEditAvatarOpen, setIsEditAvatarOpen] = useState(false);
     const [isFollowerOpen, setIsFollowerOpen] = useState(false);
-    const [pins, setPins] = useState([]);
-    const { setShowLoginModel, user } = useData()
+    const {user} = useSelector(state => state.userSlice)
     const [notFound, setNotFound] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -78,7 +75,7 @@ function UserProfile() {
 
     const handleFollowToggle = async () => {
         if (!user) {
-            setShowLoginModel(true)
+            dispatch(setShowLoginModel(true))
         }
 
         try {

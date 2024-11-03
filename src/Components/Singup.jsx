@@ -5,10 +5,11 @@ import { auth, db } from '../firebase';
 import { GoogleAuthProvider } from 'firebase/auth/web-extension';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { RxCross2 } from 'react-icons/rx';
-import { useData } from '../Context/DataProvider';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../Store/Reducers/userReducer';
 
 function Signup({ setShowSignupModal }) {
-    const {user,setUser} = useData()
+    const dispatch = useDispatch()
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -62,7 +63,7 @@ function Signup({ setShowSignupModal }) {
                 await setDoc(doc(db, "users", userCredential.user.uid), userData);
     
                 // Set the user state directly with userData
-                setUser(userData);
+                dispatch(setUser(userData))
     
                 // Reset form data and close the signup modal
                 setFormData({

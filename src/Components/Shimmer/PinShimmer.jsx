@@ -1,15 +1,11 @@
 import React from 'react'
 import Masonry from 'react-masonry-css';
+import { useSelector } from 'react-redux';
 
 function PinShimmer() {
 
-    const breakpointColumnsObj = {
-        default: 4,
-        1100: 3,
-        700: 2,
-        500: 2
-    };
-
+    const {breakpointColumnsObj} = useSelector(state => state.statesSlice)
+    
     return (
         <div>
             <Masonry

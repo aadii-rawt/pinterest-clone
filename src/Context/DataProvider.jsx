@@ -2,13 +2,17 @@ import { onAuthStateChanged } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../Store/Reducers/userReducer";
 
 const dataContext = createContext();
 
 export default function DataProvider({ children }) {
-    const [user, setUser] = useState(null)
+    // const [user,setUser] = useState(null)
+    const {user} = useSelector((state) => state.userSlice)
     const [showLoginModel, setShowLoginModel] = useState(false)
-   
+    const dispatch = useDispatch()
+
     const breakpointColumnsObj = {
         default: 5,
         1100: 3,
@@ -23,7 +27,8 @@ export default function DataProvider({ children }) {
                 // Fetch user details from Firestore using the user's UID
                 getDoc(doc(db, "users", user.uid)).then((userDoc) => {
                     if (userDoc.exists()) {
-                        setUser(userDoc.data());
+                        // setUser(userDoc.data());
+                        dispatch(setUser(userDoc.data()))
                         console.log("User is still logged in.");
                     }
                 });
@@ -37,7 +42,7 @@ export default function DataProvider({ children }) {
     }, []);
 
     return <dataContext.Provider value={{
-        user, setUser, showLoginModel, setShowLoginModel, breakpointColumnsObj
+        user, setUser, showLoginModel, breakpointColumnsObj
     }}>
         {children}
     </dataContext.Provider>

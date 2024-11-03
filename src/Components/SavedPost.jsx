@@ -1,16 +1,16 @@
-import { collection, doc, getDoc } from 'firebase/firestore';
+import {  doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import Masonry from 'react-masonry-css';
-import { useData } from '../Context/DataProvider';
 import Post from './Post';
 import PinShimmer from './Shimmer/PinShimmer';
+import { useSelector } from 'react-redux';
 
 function SavedPost({ userId }) {
-  const [savedPosts, setSavedPosts] = useState([]); // State to hold saved post details
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const { breakpointColumnsObj } = useData()
+  const [savedPosts, setSavedPosts] = useState([]); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
+  const {breakpointColumnsObj} = useSelector(state => state.statesSlice)
   const [isNoSavedPost, setIsNoSavedPost] = useState(false)
 
   useEffect(() => {

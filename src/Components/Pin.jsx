@@ -10,6 +10,8 @@ import Masonry from 'react-masonry-css';
 import Post from './Post';
 import { useData } from '../Context/DataProvider';
 import { saveAs } from 'file-saver';
+import { useDispatch } from 'react-redux';
+import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function Pin() {
     const { id } = useParams()
@@ -18,8 +20,9 @@ function Pin() {
     const [morePins, setMorePins] = useState([])
     const { breakpointColumnsObj } = useData()
     const [openShareModal, setOpenShareModal] = useState(false)
-    const { user,setShowLoginModel } = useData()
+    const { user } = useData()
     const [isSaved, setIsSaved] = useState(false)
+    const dispatch = useDispatch()
 
     // -------------------- fetch the pin ----------------------------
     useEffect(() => {
@@ -95,7 +98,7 @@ function Pin() {
     // -------------------- save the pin ----------------------------
     async function savePin() {
         if (!user) {
-            setShowLoginModel(true)
+            dispatch(setShowLoginModel(true))
             return;
         }
         try {

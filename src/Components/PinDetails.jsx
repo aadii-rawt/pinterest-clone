@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CommentList from './CommentList';
-// import { users } from '../utils';
 import { Link } from 'react-router-dom';
-import { useData } from '../Context/DataProvider';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function PinDetails({ id, pin, userDetails }) {
-    const { user } = useData()
+    const {user} = useSelector(state => state.userSlice)
     const [isuserFollowed, setIsuserFollowed] = useState(false)
     const dispatch = useDispatch();
 

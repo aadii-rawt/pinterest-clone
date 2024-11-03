@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { createPortal } from 'react-dom';
 import { auth, db } from '../firebase';
 import { browserLocalPersistence, setPersistence, signInWithEmailAndPassword } from 'firebase/auth';
 import { RxCross2 } from 'react-icons/rx';
-import { useData } from '../Context/DataProvider';
-// import { users } from '../utils';
-import { json } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setShowLoginModel } from '../Store/Reducers/statesSlice';
+import { setUser } from '../Store/Reducers/userReducer';
 
 function Login({ }) {
-  const { user, setUser, users } = useData()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,26 +21,6 @@ function Login({ }) {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
-
-  // function handleLogin(e){
-  //   e.preventDefault()
-  //   users?.map((u) => {
-  //     if(u?.email === formData?.email && u?.password === formData?.password){
-  //       setUser(u)
-  //       setShowLoginModel(false)
-  //       setFormData({
-  //         email: "",
-  //         password: ""
-  //       })
-  //       console.log("login successfully");
-
-  //     }else{
-  //       setError("Invalid email and password")
-  //     }
-  //   })
-  //   console.log("login");
-  // }
-
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -64,8 +41,8 @@ function Login({ }) {
         const userDoc = await getDoc(doc(db, "users", uid));
         if (userDoc.exists()) {
           // Set the user state with fetched user data
-          setUser(userDoc.data());
-
+          // setUser(userDoc.data());
+          dispatch(setUser(userDoc.data()))
           // Close login modal and reset form data
           setShowLoginModel(false);
           setFormData({

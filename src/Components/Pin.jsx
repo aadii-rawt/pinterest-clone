@@ -8,9 +8,8 @@ import { MdOutlineFileDownload } from 'react-icons/md';
 import { IoMdShare } from 'react-icons/io';
 import Masonry from 'react-masonry-css';
 import Post from './Post';
-import { useData } from '../Context/DataProvider';
 import { saveAs } from 'file-saver';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function Pin() {
@@ -18,9 +17,9 @@ function Pin() {
     const [pin, setPin] = useState(null)
     const [userDetails, setUserDetails] = useState({})
     const [morePins, setMorePins] = useState([])
-    const { breakpointColumnsObj } = useData()
+    const {breakpointColumnsObj} = useSelector(state => state.statesSlice)
     const [openShareModal, setOpenShareModal] = useState(false)
-    const { user } = useData()
+    const {user} = useSelector(state => state.userSlice)
     const [isSaved, setIsSaved] = useState(false)
     const dispatch = useDispatch()
 

@@ -7,14 +7,19 @@ import { useData } from '../Context/DataProvider';
 // import { users } from '../utils';
 import { json } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { setShowLoginModel } from '../Store/Reducers/statesSlice';
 
 function Login({ }) {
-  const { user, setUser, setShowLoginModel, users } = useData()
+  const { user, setUser, users } = useData()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   })
   const [error, setError] = useState("")
+  const dispatch = useDispatch()
+
+  
   function handleData(e) {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -82,11 +87,10 @@ function Login({ }) {
     }
   }
 
-
   // close login form
   const handleClose = (e) => {
     e.stopPropagation();
-    setShowLoginModel(false);
+    dispatch(setShowLoginModel(false))
   };
 
   return createPortal(

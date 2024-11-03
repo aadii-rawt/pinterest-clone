@@ -1,24 +1,22 @@
 import React, { useState } from 'react'
-import img from "../../public/img3.jpg";
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import { db } from '../firebase';
 import { IoMdSend } from 'react-icons/io';
-import { useData } from '../Context/DataProvider'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setShowLoginModel } from '../Store/Reducers/statesSlice';
+
 function Comment({ id }) {
 
-  const { user } = useData()
-
+  const { user } = useSelector(state => state.userSlice)
   const [newComment, setNewComment] = useState("");
   const dispatch = useDispatch()
 
   // // add new comment
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!user) {
-      return dispatch(setShowLoginModel(true)); // Show login modal if user isn't authenticated
+      return dispatch(setShowLoginModel(true)); 
     }
 
     if (!newComment.trim()) return; // Prevent empty comment submission
@@ -43,7 +41,7 @@ function Comment({ id }) {
     }
   };
 
-   
+
   return (
     <div className='flex items-center justify-between gap-2'>
       {user && <div className='flex items-center justify-center'>

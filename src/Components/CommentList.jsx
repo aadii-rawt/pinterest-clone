@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-// import { commentsData,} from '../utils'; // Import the users and comments data
-import { useData } from '../Context/DataProvider';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
 function CommentList({ id }) {
-    const [comments, setComments] = useState([]); // comment list
-    const { users } = useData(); // Assuming `users` contains all the user data
-    const [loading, setLoading] = useState(true); // Loading state for fetching comments
+    const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // Fetch comments from Firestore
     useEffect(() => {
@@ -15,28 +12,18 @@ function CommentList({ id }) {
             try {
                 setLoading(true);
 
-                // Reference to the comments collection for the given pin ID
                 const commentsRef = collection(db, 'comments', id, 'userComments');
-
-                // Fetch all comments for the specific pin
                 const commentSnapshot = await getDocs(commentsRef);
                 const commentsData = await Promise.all(
                     commentSnapshot.docs.map(async (commentDoc) => {
                         const comment = commentDoc.data();
-
-                        // Fetch user data for each comment based on commentBy (userId)
-                        const userRef = doc(db, 'users', comment.commentBy); // Corrected usage of `doc`
-                        const userSnap = await getDoc(userRef);
-
-                        // Combine comment with user details
+                        const userRef = doc(db, 'users', comment.commentBy);
                         return {
                             ...comment,
                             user: userSnap.exists() ? userSnap.data() : null,
                         };
                     })
                 );
-
-                // Set comments to state
                 setComments(commentsData);
             } catch (error) {
                 console.error("Error fetching comments:", error);
@@ -44,7 +31,6 @@ function CommentList({ id }) {
                 setLoading(false);
             }
         };
-
         fetchComments();
     }, [id]);
 
@@ -55,7 +41,7 @@ function CommentList({ id }) {
                 <p>Loading comments...</p>
             ) : comments?.length > 0 ? (
                 comments.map((comment, index) => {
-                    const user = comment?.user; // Get user details for the comment
+                    const user = comment?.user;
                     return (
                         <div key={index} className='flex items-baseline gap-2'>
                             {user?.avatar ? (
